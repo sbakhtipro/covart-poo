@@ -1,0 +1,170 @@
+@font-face {
+    font-family: 'poppins';
+    src: url(../fonts/Poppins/Poppins-Regular.ttf);
+}
+
+@font-face {
+    font-family: 'audiowide';
+    src: url(../fonts/Audiowide/Audiowide-Regular.ttf);
+}
+
+:root {
+    --background-color:rgb(241, 241, 241); /* couleur de fond principale */
+    --title-color:rgb(43, 43, 43); /* couleur des titres */
+    --text-color:rgb(33, 33, 33); /* couleur des titres */
+    --spacing-lg: 3rem; 
+    --spacing: 2rem; /* espace entre les sections */
+    --spacing-sm: 1rem; /* espace entre des éléments d'une même section, utilisé également pour padding et gap */
+    --shadow-color:rgb(118, 118, 118); /* couleur des box-shadow */
+    --font-family:'poppins',sans-serif;
+    --transition: 0.3s ease; /* transition principale */
+}
+
+/* création des deux thèmes ayant chacun sa couleur principale */
+.u-passenger-theme {
+    --color-primary:#181852; /* couleur principale de l'espace passager */
+}
+
+.u-driver-theme {
+    --color-primary:#105062; /* couleur principale de l'espace conducteur */
+}
+/* 1B8287 */
+/* ---------------------------------------------------------------------- */
+
+/* réinitialisation des styles par défaut du navigateur, mise en place des styles nécessaires */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+}
+
+li {
+    list-style: none;
+}
+
+fieldset {
+    border: none;
+}
+
+button {
+    border: none;
+    background-color: rgba(0,0,0,0);
+    cursor: pointer;
+    font-family: var(--font-family);
+}
+
+body {
+    background-color: var(--background-color);
+    font-family: var(--font-family);
+}
+
+main {
+    min-height: 100vh;
+}
+
+h1,h2,h3 { /* style titres */
+    color: var(--title-color)
+}
+
+h1,h2 {
+    margin-bottom: var(--spacing);
+}
+
+h3 {
+    margin-bottom: var(--spacing-sm);
+}
+
+section {
+    margin-bottom: 3rem;
+}
+
+/* ---------------------------------------------------------------------- */
+
+/* classes utilitaires */
+img:not(.u-icon) { /* ajuste toute les images sauf .u-icon pour qu'elles remplissent leur div parent sans être déformées */
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.u-img-wrapper { /* div parent d'une img non .u-icon */
+    overflow: hidden;
+}
+
+.u-svg { /* classe utilisée pour cacher les svg lors de leur déclaration */
+    display: none;
+}
+
+.u-no-scroll {
+    overflow: hidden;
+}
+
+.u-overlay {
+    background-color: rgba(0, 0, 0, 0.6);
+    position: fixed;
+    inset: 0;
+    z-index: 4;
+    display: none;
+}
+
+.u-close-modal-button {
+    position: fixed;
+    top: 20px;
+    right: var(--spacing-sm);
+    z-index: 1000;
+    border-radius: 20px;
+    font-size: 1.2rem;
+    background-color: var(--background-color);
+    padding: 0 6px;
+}
+
+.u-modal {
+    z-index: 5;
+    overflow-y: auto;
+}
+
+.u-action {
+    display: block;
+    font-size: 1rem;
+    font-family: var(--font-family);
+    border-radius: 50px;
+    padding: 10px 30px;
+    position: fixed;
+    top: 85vh;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: pointer;
+}
+
+.u-action-primary {
+    background-color: var(--color-primary);
+    color: white;
+    margin-bottom: var(--spacing-sm);
+    border: none;
+}
+
+.u-action-secondary {
+    border: 2px solid var(--color-primary);
+    color: var(--color-primary);
+}
+
+.u-container, .u-container-sm { /* classe container personnalisée responsive */
+    margin: 0 auto var(--spacing-lg);
+    padding: 0 var(--spacing-sm);
+    width: 100%;
+    position: relative;
+}
+
+@media screen and (min-width:769px) {
+    .u-container {
+        max-width: 1100px;
+    }
+    .u-container-sm {
+        max-width: 700px;
+    }
+}
