@@ -2,22 +2,32 @@
 
 namespace App\Model;
 
-class Model {
+abstract class Model {
 
-    public static function create() {
+    protected static string $table;
 
+    protected static function create(array $data) {
+        $keys = array_keys($data);
+        $columns = implode(', ',$keys);
+        $values = implode(', :',$keys);
+        $sql = "INSERT INTO " . self::$table . " (" . $columns . ") VALUES (:" . $values . ")";
+        $sql->execute($data);
     }
 
-    public static function read() {
+    protected static function readOne($id) {
+        $sql = "SELECT * FROM " . self::$table . " WHERE :id=" .$id;
+    }
+
+    protected static function readAll() {
+        $sql = "SELECT * FROM " . self::$table;
+    }
+
+    protected static function update() {
         
     }
 
-    public static function update() {
-        
-    }
-
-    public static function delete() {
-        
+    protected static function delete($id) {
+        $sql = "DELETE FROM " .self::$table . " WHERE :id=" . $id;
     }
 
 }

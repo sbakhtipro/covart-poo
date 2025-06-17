@@ -9,25 +9,34 @@ class Database {
 
     private static $db;
 
-    private string $host = HOST;
-    private string $dbname = DBNAME;
-    private string $charset = CHARSET;
-    private string $username = USERNAME;
-    private string $password = PASSWORD;
+    private static string $host = HOST;
+    private static string $dbname = DBNAME;
+    private static string $charset = CHARSET;
+    private static string $username = USERNAME;
+    private static string $password = PASSWORD;
 
-    public function connect() {
+    private static function dbconnect() {
         try {
-            $this->db = new PDO("mysql:host=" . $this->host . ";dbname=" . $this->dbname . ";charset=" . $this->charset, $this->username, $this->password);
+            self::$db = new PDO(
+                "mysql:
+                host=" . self::$host .
+                ";dbname=" . self::$dbname .
+                ";charset=" . self::$charset,
+                self::$username,
+                self::$password
+            );
         }
         catch (PDOException $e) {
+            $error = $e->getMessage();
             die;
         }
     }
-    
-    public function db() {
+
+    public static function getDb() {
         if (self::$db === null) {
-            $this->db = $this->connect();
+            self::dbconnect();
         }
-        return $this->db; 
+        return self::$db;
     }
+
 }
