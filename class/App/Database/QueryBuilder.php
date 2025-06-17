@@ -53,9 +53,9 @@ class QueryBuilder {
     }
 
     public function query() {
-        $db = \App\Database\Database::getDb();
         $sql = $this->select . $this->from . $this->where;
-        var_dump($sql);
+        $stmt = \App\Database\Database::getDb()->prepare($sql);
+
     }
 
 }
