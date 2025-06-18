@@ -7,15 +7,15 @@ use PDOException;
 
 class Database {
 
-    private static $db;
+    public static $db;
 
-    private static string $host = HOST;
-    private static string $dbname = DBNAME;
-    private static string $charset = CHARSET;
-    private static string $username = USERNAME;
-    private static string $password = PASSWORD;
+    public static string $host = HOST;
+    public static string $dbname = DBNAME;
+    public static string $charset = CHARSET;
+    public static string $username = USERNAME;
+    public static string $password = PASSWORD;
 
-    private static function dbconnect() {
+    public static function dbconnect() {
         try {
             self::$db = new PDO(
                 "mysql:
@@ -25,6 +25,7 @@ class Database {
                 self::$username,
                 self::$password
             );
+            return self::$db;
         }
         catch (PDOException $e) {
             $error = $e->getMessage();
@@ -34,7 +35,7 @@ class Database {
 
     public static function getDb() {
         if (self::$db === null) {
-            self::dbconnect();
+            self::$db = self::dbconnect();
         }
         return self::$db;
     }
