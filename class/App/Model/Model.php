@@ -4,6 +4,11 @@ namespace App\Model;
 
 abstract class Model {
 
+    protected \App\Database\QueryBuilder $queryBuilder;
+
+    public function __construct() {
+        $this->queryBuilder = new \App\Database\QueryBuilder();
+    }
     // protected static string $table;
 
     // protected static function create(array $data) {

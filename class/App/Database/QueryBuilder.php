@@ -14,12 +14,22 @@ class QueryBuilder {
     public ?string $joinOn = null;
     public ?array $bindings = [];
 
-    public function table(string $table) {
+    /**
+     * Définir la table sur laquelle on applique la requête initialement
+     * @param string $table
+     * @return self
+     */
+    public function table(string $table): self {
         $this->table = $table;
         return $this;
     }
 
-    public function select(?array $columns = null) {
+    /**
+     * Requête SELECT
+     * @param string[]|null $columns  Colonnes dont on récupère les données (ex : [column 1, column 2])
+     * @return self
+     */
+    public function select(?array $columns = null): self {
         if (!$columns) {
             $sql = "SELECT *";
         }
@@ -31,7 +41,12 @@ class QueryBuilder {
         return $this;
     }
 
-    public function insertInto(array $columns) {
+    /**
+     * Requête INSERT INTO
+     * @param array<string, mixed> $columns  Colonnes dans lesquelles on insère les valeurs (ex : ['column 1' => 'value', 'column 2' => 'value'])
+     * @return self
+     */
+    public function insertInto(array $columns): self {
         $sql = "INSERT INTO " . $this->table . " (";
         $columnsTable = array_keys($columns);
         $columnsStr = implode(", ", $columnsTable);
@@ -44,13 +59,22 @@ class QueryBuilder {
         return $this;
     }
 
-    public function delete() {
+    /**
+     * Requête DELETE
+     * @return self
+     */
+    public function delete(): self {
         $sql = "DELETE";
         $this->delete = $sql;
         return $this;
     }
 
-    public function update(array $columns) {
+    /**
+     * Requête UPDATE
+     * @param array<string, mixed> $columns  Colonnes que l'on met à jour (ex : ['column 1' => 'value', 'column 2' => 'value'])
+     * @return self
+     */
+    public function update(array $columns): self {
         $sql = "UPDATE " . $this->table . " SET ";
         $i = 0;
         foreach ($columns as $column => $value) {
@@ -67,53 +91,70 @@ class QueryBuilder {
         return $this;
     }
 
-
-    public function joinOn(array $joins) {
+    /**
+     * Ajouter une jointure INNER JOIN
+     * @param string $table             Table à joindre
+     * @param string $leftColumnTable   Table de la colonne de gauche
+     * @param string $leftColumn        Colonne de gauche
+     * @param string $rightColumnTable  Table de la colonne de droite
+     * @param string $rightColumn       Colonne de droite
+     * @return self
+     */
+    public function joinOn($table, $leftColumnTable, $leftColumn, $rightColumnTable, $rightColumn): self {
         $sql = "";
-        foreach ($joins as $join) {
-            $sql .= " JOIN " . $join['table'] . " ON " . $join['leftColumnTable'] . "." . $join['leftColumn'] . " = " . $join['rightColumnTable'] . "." . $join['rightColumn'];
-        }
-        $this->joinOn = $sql;
+        $sql .= " JOIN " . $table . " ON " . $leftColumnTable . "." . $leftColumn . " = " . $rightColumnTable . "." . $rightColumn;
+        $this->joinOn .= $sql;
         return $this;
     }
 
-    public function from() {
+    /**
+     * Ajouter un FROM, se base sur la table déjà présente dans les propriétés de la classe
+     * @return self
+     */
+    public function from(): self {
         $sql = " FROM " . $this->table;
         $this->from = $sql;
         return $this;
     }
 
-    public function where(array $conditions) {
-        $sql = " WHERE ";
-        $i = 0;
-        foreach ($conditions as $condition) {
-            if (isset($condition['table'])) {
-                $sql .= $condition['table'] . ".";
-            }
-            $sql .= $condition['condition'] . " " . $condition['operator'] . " " . ":" . $condition['condition'];
-            $i++;
-            if ($i<count($conditions)) {
-                $sql .= " AND ";
-            }         
+    /**
+     * Ajouter une condition WHERE
+     * @param string $column      Colonne de la condition
+     * @param string $operator    Opérateur
+     * @param string $value       Valeur de la condition
+     * @param string|null $table  Table où se situe la colonne
+     * @return self
+     */
+    public function where($column, $operator, $value, $table = null): self {
+        if ($this->where === null)  {
+            $sql = " WHERE ";
         }
-        if (isset($condition)) {
-            foreach ($conditions as $condition) {
-                $this->bindings[$condition['condition']] = $condition['value'];
-            }
-        } 
-        $this->where = $sql;
+        else {
+            $sql = " AND ";
+        }
+        if (isset($table)) {
+            $sql .= $table . ".";
+        }
+        $sql .= $column . " " . $operator . " :" . $column;
+        $this->bindings[$column] = $value;
+        $this->where .= $sql;
         return $this;
     }
 
-    public function query() {
+    /**
+     * Rassemble les morceaux de requête et l'exécute
+     * @return void
+     */
+    public function query(): array {
         $sql = $this->select . $this->insertInto . $this->delete . $this->update . $this->from . $this->joinOn . $this->where;
-        var_dump($sql);
+        // var_dump($sql);
         // var_dump($this->bindings);
         // exit;
         $stmt = Database::getDb()->prepare($sql);
         $stmt->execute($this->bindings);
         $data = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        var_dump($data);
+        // var_dump($data);
+        return $data;
     }
 
 }

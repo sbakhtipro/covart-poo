@@ -12,76 +12,88 @@ class ProposedCommute {
     private float $departurePlaceLat;
     private float $departurePlaceLon;
     private \DateTime $departureTime;
-    private ?bool $suppression = null;
+    private bool $suppression = false;
     private ?\DateTime $suppressionTime = null;
 
-    public function setId($id) {
+    
+    public function setId($id): void {
         $this->id = $id;
     }
-    public function getId() {
-        return $this->id;
+    public function getId(bool $raw = false) {
+        if ($raw) {
+            return $this->id;
+        }
+        return escapeForHtml($this->id);
     }
 
-    public function setArrivalPlace($arrivalPlace) {
+    public function setArrivalPlace(string $arrivalPlace): void {
         $this->arrivalPlace = $arrivalPlace;
     }
-    public function getArrivalPlace() {
-        return $this->arrivalPlace;
+    public function getArrivalPlace(bool $raw = false): string {
+        if ($raw) {
+            return $this->arrivalPlace;
+        }
+        return escapeForHtml($this->arrivalPlace);
     }
 
-    public function setArrivalPlaceLat($arrivalPlaceLat) {
+    public function setArrivalPlaceLat(float $arrivalPlaceLat): void {
         $this->arrivalPlaceLat = $arrivalPlaceLat;
     }
-    public function getArrivalPlaceLat() {
+    public function getArrivalPlaceLat(): float {
         return $this->arrivalPlaceLat;
     }
 
-    public function setArrivalPlaceLon($arrivalPlaceLon) {
+    public function setArrivalPlaceLon(float $arrivalPlaceLon): void {
         $this->arrivalPlaceLon = $arrivalPlaceLon;
     }
-    public function getArrivalPlaceLon() {
+    public function getArrivalPlaceLon(): float {
         return $this->arrivalPlaceLon;
     }
 
-    public function setDeparturePlace($departurePlace) {
+    public function setDeparturePlace(string $departurePlace): void {
         $this->departurePlace = $departurePlace;
     }
-    public function getDeparturePlace() {
-        return $this->departurePlace;
+    public function getDeparturePlace(bool $raw = false): string {
+        if ($raw) {
+            return $this->departurePlace;
+        }
+        return escapeForHtml($this->departurePlace);
     }
 
-    public function setDeparturePlaceLat($departurePlaceLat) {
+    public function setDeparturePlaceLat(float $departurePlaceLat): void {
         $this->departurePlaceLat = $departurePlaceLat;
     }
-    public function getDeparturePlaceLat() {
+    public function getDeparturePlaceLat(): float {
         return $this->departurePlaceLat;
     }
 
-    public function setDeparturePlaceLon($departurePlaceLon) {
+    public function setDeparturePlaceLon(float $departurePlaceLon): void {
         $this->departurePlaceLon = $departurePlaceLon;
     }
-    public function getDeparturePlaceLon() {
+    public function getDeparturePlaceLon(): float {
         return $this->departurePlaceLon;
     }
 
-    public function setDepartureTime($departureTime) {
+    // FORMATTER GETTER /!\
+    public function setDepartureTime(\DateTime $departureTime): void {
         $this->departureTime = $departureTime;
     }
-    public function getDepartureTime() {
+    public function getDepartureTime(): \DateTime {
         return $this->departureTime;
     }
 
-    public function setSuppression($suppression) {
+    public function setSuppression(bool $suppression = false): void {
         $this->suppression = $suppression;
     }
-    public function getSuppression() {
+    public function getSuppression(): bool {
         return $this->suppression;
     }
 
-    public function setSuppressionTime($suppressionTime) {
+    // FORMATTER GETTER /!\
+    public function setSuppressionTime(?\DateTime $suppressionTime = null): void {
         $this->suppressionTime = $suppressionTime;
     }
-    public function getSuppressionTime() {
+    public function getSuppressionTime(): ?\DateTime {
         return $this->suppressionTime;
     }
-}
+}     

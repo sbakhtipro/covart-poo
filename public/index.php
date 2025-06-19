@@ -10,43 +10,16 @@ App\App::init();
 
 // $query
 //     ->table('salaries')
-//     ->select([
-//         'salarie_prenom',
-//         'salarie_nom',
-//     ])
-//     // ->select()
-//     // ->insertInto([
-//     //     'salarie_prenom' => 'Sarah',
-//     //     'salarie_nom' => 'H',
-//     // ])
-//     // ->delete()
+//     ->select(['salarie_prenom','salarie_nom'])
 //     ->from()
-//     ->joinOn([
-//         [
-//             'table' => 'postes',
-//             'leftColumnTable' => 'postes',
-//             'leftColumn' => 'poste_id',
-//             'rightColumnTable' => 'salaries',
-//             'rightColumn' => 'poste_id',
-//         ],
-//     ])
-//     ->where([
-//         [   
-//             'table' => 'salaries',
-//             'condition' => 'poste_id',
-//             'operator' => '=',
-//             'value' => '2',
-//         ],
-//     ])
-//     // ->joinOn([
-//     //     [
-//     //         'table' => 'services',
-//     //         'leftColumnTable' => 'services',
-//     //         'leftColumn' => 'service_id',
-//     //         'rightColumnTable' => 'salaries',
-//     //         'rightColumn' => 'salarie_id',
-//     //     ],
-//     // ])
+//     ->joinOn('services', 'services', 'service_id', 'salaries', 'salarie_id')
+//     ->joinOn('services', 'services', 'service_id', 'salaries', 'salarie_id')
+//     ->where('poste_id1','=','2',)
+//     ->where('poste_id','=','2','salaries')
 //     ->query();
 
-// // App\Router\Router::run();
+// App\Router\Router::run();
+
+$test = new \App\Model\Agencies();
+
+$test->getAllAddresses();

@@ -11,7 +11,7 @@ class Controller {
             require_once ROOT . 'view/' . $path . '.html.php';
             require_once ROOT . 'view/partials/_footer.html.php';
         }
-        else if ($path==='login') {
+        else if ($path==='login' || $path==='license-verify') {
             require_once ROOT . 'view/' . $path . '.html.php';
         }
     }

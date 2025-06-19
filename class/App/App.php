@@ -7,7 +7,7 @@ class App {
     public static function init() {
         session_start();
         require_once "../config/config.php";
-        // require_once "../helpers/helper.php";
+        // require_once ROOT . "/helpers/helper.php";
         self::autoloader();
     }
 
