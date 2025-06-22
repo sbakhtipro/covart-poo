@@ -13,6 +13,7 @@ class QueryBuilder {
     public ?string $where = null;
     public ?string $joinOn = null;
     public ?array $bindings = [];
+    public ?string $sql = '';
 
     /**
      * Définir la table sur laquelle on applique la requête initialement
@@ -75,19 +76,19 @@ class QueryBuilder {
      * @return self
      */
     public function update(array $columns): self {
-        $sql = "UPDATE " . $this->table . " SET ";
+        $this->sql = "UPDATE " . $this->table . " SET ";
         $i = 0;
         foreach ($columns as $column => $value) {
-            $sql .= $column . " = :" . $column;
+            $this->sql .= $column . " = :" . $column;
             $i++;
             if ($i<count($columns)) {
-                $sql .= ", ";
+                $this->sql .= ", ";
             }   
         }
         foreach ($columns as $column => $value) {
             $this->bindings[$column] = $value;
         }
-        $this->update = $sql;
+        $this->update = $this->sql;
         return $this;
     }
 
@@ -146,14 +147,14 @@ class QueryBuilder {
      * @return void
      */
     public function query(): array {
-        $sql = $this->select . $this->insertInto . $this->delete . $this->update . $this->from . $this->joinOn . $this->where;
-        // var_dump($sql);
+        $this->sql .= $this->select . $this->insertInto . $this->delete . $this->update . $this->from . $this->joinOn . $this->where;
+        var_dump($this->sql);
         // var_dump($this->bindings);
         // exit;
-        $stmt = Database::getDb()->prepare($sql);
+        $stmt = Database::getDb()->prepare($this->sql);
         $stmt->execute($this->bindings);
         $data = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        // var_dump($data);
+        var_dump($data);
         return $data;
     }
 

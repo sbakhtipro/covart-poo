@@ -11,6 +11,7 @@ $stmt->execute();
 $commuteTypes = $stmt->fetchAll();
 
 if (isset($_POST['commute-type']) && isset($_POST['input-address']) && isset($_POST['list-address']) && isset($_POST['coordonnees-list']) && isset($_POST['coordonnees-input'])) {
+    // if isset... alors le controleur peut appeler la methode qui fait passer a l'etape 2
     $_SESSION['commute-type'] = $_POST['commute-type'];
     $_SESSION['input-address'] = $_POST['input-address'];
     $_SESSION['list-address'] = $_POST['list-address'];
@@ -20,6 +21,11 @@ if (isset($_POST['commute-type']) && isset($_POST['input-address']) && isset($_P
 
 // fonction date("format dans str, Y-m-d ou d/m/Y"); fuseau horaire heure du serveur -> ce qui est fait ici peut se faire SANS objet
 // récupération de value directement au format SQL
+
+
+//_____________________________________________________________
+//_____________________________________________________________
+//_____________________________________________________________
 
 $formatter = new IntlDateFormatter(
     'fr_FR', // langue française
@@ -46,6 +52,9 @@ for ($i=0;$i<8;$i++) {
     ];
     array_push($tableDays,$day);
 }
+//_____________________________________________________________
+//_____________________________________________________________
+//_____________________________________________________________
 
 // foreach ($tableDays as $day) {
 //     $dayOfTheWeek = $day->format('l');
@@ -66,8 +75,14 @@ if (isset($_SESSION['commute-type']))
 //         echo "Format de date invalide.";
 //     }
 // }
-class ProposedCommute {
+class ProposedCommute extends Model {
 
-    public function 
+    public function proposeCommute() {
+        $this->queryBuilder
+            ->table('trajets_proposes')
+            ->insertInto([
+                
+            ])
+    }
 
 }

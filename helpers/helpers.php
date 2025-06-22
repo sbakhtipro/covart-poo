@@ -6,8 +6,3 @@ function escapeForHtml($str) {
     }
     return htmlspecialchars($str);
 }
-
-function redirect($path) {
-    header('Location:' . $path);
-    exit;
-}

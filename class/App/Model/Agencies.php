@@ -6,7 +6,7 @@ namespace App\Model;
 
 class Agencies extends Model {
 
-    public array $addresses = [];
+    public $addresses = [];
 
     public function getAllAddresses(): array {
         $addresses = $this->queryBuilder
@@ -14,6 +14,7 @@ class Agencies extends Model {
             ->select(['agence_numero_voie','agence_voie','agence_ville','agence_code_postal'])
             ->from()
             ->query();
+        $this->addresses = $addresses;
         return $this->addresses;
     }
 

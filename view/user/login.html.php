@@ -9,7 +9,7 @@
 
 <body>
     <main id="main">
-        <form action="index.php?page=login" method="POST">
+        <form action="index.php?controller=user&method=login" method="POST">
             <label for="salarie_email">Email :</label>
             <input type="email" id="salarie_email" name="salarie_email">
             <label for="utilisateur_mdp">Mot de passe :</label>

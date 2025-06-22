@@ -42,8 +42,6 @@
         </symbol>
     </svg>
 
-    <?php require_once ROOT . '/template/partials/_header.html.php' ?>
-
     <div class="home-page-layout u-container">
 
         <aside class="notifications">
@@ -67,7 +65,7 @@
         </aside>
 
         <main class="main" id="main">
-            <h1>Espace passager</h1>
+            <h1>Espace conducteur</h1>
             <div class="main__links">
                 <a href="index.php?page=passenger-index" class="main__switch u-passenger-theme">Je suis passager</a>
                 <a href="index.php?page=choose-address" class="main__search">Proposer un trajet</a>
@@ -94,7 +92,7 @@
                     <div class="commute-trip__more-details-modal u-modal" id="modal-ID-TRAJET-DEMANDE" aria-modal="true" aria-label="Détails du trajet">
                         <button class="commute-trip__close-modal-button u-close-modal-button">&#10006;</button>
                         <div class="commute-trip__modal-content">
-                            <?php require_once ROOT . '/template/partials/_map.html.php'; ?>
+                            <!-- require_once ROOT . '/template/partials/_map.html.php'; -->
                         </div>
                     </div>
                 </article>

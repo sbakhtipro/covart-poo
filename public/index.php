@@ -6,6 +6,8 @@ require_once "../class/App/App.php";
 
 App\App::init();
 
+App\Router\Router::run();
+
 // $query = new \App\Database\QueryBuilder();
 
 // $query
@@ -18,8 +20,16 @@ App\App::init();
 //     ->where('poste_id','=','2','salaries')
 //     ->query();
 
-// App\Router\Router::run();
+// $test = new \App\Model\Agencies();
 
-$test = new \App\Model\Agencies();
+// $test->getAllAddresses();
 
-$test->getAllAddresses();
+// $test = new \App\Model\User();
+
+// // var_dump($test->sql);
+
+// $test->getUserByCredentials();
+
+// $test = new \App\Auth\UserAuth();
+
+// var_dump($test->userAuthentification());

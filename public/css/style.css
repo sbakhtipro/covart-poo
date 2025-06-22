@@ -1,0 +1,903 @@
+@font-face {
+    font-family: 'poppins';
+    src: url(../fonts/Poppins/Poppins-Regular.ttf);
+}
+
+@font-face {
+    font-family: 'audiowide';
+    src: url(../fonts/Audiowide/Audiowide-Regular.ttf);
+}
+
+:root {
+    --background-color:rgb(241, 241, 241); /* couleur de fond principale */
+    --title-color:rgb(43, 43, 43); /* couleur des titres */
+    --text-color:rgb(33, 33, 33); /* couleur des titres */
+    --spacing-lg: 3rem; 
+    --spacing: 2rem; /* espace entre les sections */
+    --spacing-sm: 1rem; /* espace entre des éléments d'une même section, utilisé également pour padding et gap */
+    --shadow-color:rgb(118, 118, 118); /* couleur des box-shadow */
+    --font-family:'poppins',sans-serif;
+    --transition: 0.3s ease; /* transition principale */
+}
+
+/* création des deux thèmes ayant chacun sa couleur principale */
+.u-passenger-theme {
+    --color-primary:#181852; /* couleur principale de l'espace passager */
+}
+
+.u-driver-theme {
+    --color-primary:#105062; /* couleur principale de l'espace conducteur */
+}
+/* 1B8287 */
+/* ---------------------------------------------------------------------- */
+
+/* réinitialisation des styles par défaut du navigateur, mise en place des styles nécessaires */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+}
+
+li {
+    list-style: none;
+}
+
+fieldset {
+    border: none;
+}
+
+button {
+    border: none;
+    background-color: rgba(0,0,0,0);
+    cursor: pointer;
+    font-family: var(--font-family);
+}
+
+body {
+    background-color: var(--background-color);
+    font-family: var(--font-family);
+}
+
+main {
+    min-height: 100vh;
+}
+
+h1,h2,h3 { /* style titres */
+    color: var(--title-color)
+}
+
+h1,h2 {
+    margin-bottom: var(--spacing);
+}
+
+h3 {
+    margin-bottom: var(--spacing-sm);
+}
+
+section {
+    margin-bottom: 3rem;
+}
+
+/* ---------------------------------------------------------------------- */
+
+/* classes utilitaires */
+img:not(.u-icon) { /* ajuste toute les images sauf .u-icon pour qu'elles remplissent leur div parent sans être déformées */
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.u-img-wrapper { /* div parent d'une img non .u-icon */
+    overflow: hidden;
+}
+
+.u-svg { /* classe utilisée pour cacher les svg lors de leur déclaration */
+    display: none;
+}
+
+.u-no-scroll {
+    overflow: hidden;
+}
+
+.u-overlay {
+    background-color: rgba(0, 0, 0, 0.6);
+    position: fixed;
+    inset: 0;
+    z-index: 4;
+    display: none;
+}
+
+.u-close-modal-button {
+    position: fixed;
+    top: 20px;
+    right: var(--spacing-sm);
+    z-index: 1000;
+    border-radius: 20px;
+    font-size: 1.2rem;
+    background-color: var(--background-color);
+    padding: 0 6px;
+}
+
+.u-modal {
+    z-index: 5;
+    overflow-y: auto;
+}
+
+.u-action {
+    display: block;
+    font-size: 1rem;
+    font-family: var(--font-family);
+    border-radius: 50px;
+    padding: 10px 30px;
+    position: fixed;
+    top: 85vh;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: pointer;
+}
+
+.u-action-primary {
+    background-color: var(--color-primary);
+    color: white;
+    margin-bottom: var(--spacing-sm);
+    border: none;
+}
+
+.u-action-secondary {
+    border: 2px solid var(--color-primary);
+    color: var(--color-primary);
+}
+
+.u-container, .u-container-sm { /* classe container personnalisée responsive */
+    margin: 0 auto var(--spacing-lg);
+    padding: 0 var(--spacing-sm);
+    width: 100%;
+    position: relative;
+}
+
+@media screen and (min-width:769px) {
+    .u-container {
+        max-width: 1100px;
+    }
+    .u-container-sm {
+        max-width: 700px;
+    }
+}
+
+/* ---------------------------------------------------------------------- */
+
+/* header */
+.header { /* conteneur du logo et de la nav, les positionne chacun à une extrémité de l'écran */
+    position: sticky;
+    top: 0;
+    background-color: var(--color-primary);
+    z-index: 3;
+    margin-bottom: var(--spacing-lg);
+    border-bottom: 2px solid var(--background-color);
+}
+
+/* menu accès rapide */
+.header__quick-access {
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    width: 150px;
+}
+
+.quick-access__link {
+    position: absolute;
+    left: -1000px;
+    color: white;
+}
+
+.quick-access__link:focus {
+    left: 0;
+}
+
+/* navigation principale */
+.nav__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 0 auto;
+}
+
+.nav__logo {
+    color: white;
+    font-family: 'audiowide';
+    font-size: 1.2rem;
+}
+
+.nav__links-list {
+    display: none;
+    /* transition: 2s ease;
+    height: 0; */
+}
+
+.nav__links-list.is-open {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.nav__burger {
+    color: white;
+    font-size: 1.6rem;
+    padding: 7px 0;
+}
+
+.nav__icon {
+    display: none;
+}
+
+.nav__burger.is-closed .nav__burger-icon, .nav__burger.is-open .nav__close-icon {
+    display: block;
+}
+
+.nav__item, .nav__link  { /* liens placés en inline-block pour les rendre cliquables sur une zone plus large */
+    display: inline-block;
+}
+
+.nav__link {
+    padding: 20px; /* rendre les liens cliquables sur zone plus large, au delà de 768px de vw le padding définit la hauteur de la nav  */
+    padding-left: 0;
+    color: rgb(255, 255, 255);
+}
+
+@media screen and (min-width: 768px) {
+    .nav__burger {
+        display: none;
+    }
+    .nav__links-list {
+        display: flex;
+    }
+    .nav__links-list.is-open {
+        width: fit-content;
+    }
+    .nav__link {
+        padding-left: 20px;
+    }
+}
+
+/* ------------- Notifications - page d'accueil ------------- */
+
+.notifications {
+    margin-bottom: var(--spacing);
+}
+
+.notifications__content {
+    position: fixed;
+    display: none;
+    inset: 0; /* équivaut à top 0 right 0 bottom 0 left 0, l'élément prend tout l'écran */
+    background-color: var(--background-color);
+    padding: var(--spacing) var(--spacing-sm);
+}
+
+.notifications svg {
+    width: 40px;
+    height: 40px;
+    color: var(--color-primary);
+}
+
+.notifications__title { 
+    font-weight: 600;
+    font-size: 1.2rem;
+    padding-bottom: var(--spacing-sm);
+}
+
+.notification {
+    width: 100%;
+    display: flex;
+    border-bottom: 1px solid gray;
+    position: relative;
+    padding: var(--spacing-sm);
+}
+
+.notification__icon {
+    margin-right: 15px;
+}
+
+.notification__details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-right: var(--spacing-sm);
+}
+
+.notification__type {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.notification__schedules {
+    color: rgb(56, 56, 56);
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.notification__time {
+    color: rgb(68, 68, 68);
+    font-size: 0.8rem;
+    margin-left: auto;
+    position: absolute;
+    top: 3px;
+    right: 0;
+}
+
+/* ------------- Main - page d'accueil ------------- */
+
+/* main de l'index */
+.main {
+    width: 100%;
+}
+
+.main__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing);
+}
+
+/* liens pour passer de passager à conducteur et rechercher trajet */
+.main__switch, .main__search { 
+    width: calc(50% - calc(var(--spacing-sm) / 2));
+    font-size: 1.2rem;
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+
+.main__switch {
+    background-color: var(--color-primary);
+}
+
+.main__see-commute-requests, .main__see-proposed-commutes {
+    margin-left: auto;
+    display: block;
+    color: var(--color-primary);
+}
+
+.main__search {
+    background-color: var(--color-primary);
+}
+
+/* ------------- Conducteurs réguliers - page d'accueil ------------- */
+
+/* conteneur des passagers réguliers */
+.regular-drivers__container {
+    display: grid;
+    grid-template-columns: repeat(4,25%);
+    box-sizing: border-box;
+}
+
+/* un seul passager régulier */
+.regular-drivers__driver { 
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    padding: calc(var(--padding) / 2);
+    /* margin: 20px auto; */
+}
+
+.regular-drivers__img {
+    display: block;
+    width: 100%;
+    max-width: 100px;
+    aspect-ratio: 1/1;
+    border-radius: 80px;
+}
+
+.regular-drivers__driver span {
+    text-align: center;
+    margin-top: var(--spacing-sm);
+}
+
+/* ------------- Trajets - page d'accueil ------------- */
+
+/* card pour un trajet sur la page d'accueil */
+.commute-trip {
+    position: relative;
+    background-color: white;
+    padding: var(--spacing-sm);
+    border: 1px solid rgb(185, 185, 185);
+    border-radius: 15px;
+    color: black;
+    margin-bottom: var(--spacing-sm);
+}
+
+/* horaires et barre de trajet */
+.commute-trip__schedules {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+/* conteneur de la barre de trajet */
+.commute-trip__bar-wrapper {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+}
+
+/* icone décoratif cercle dans cercle barre de trajet */
+.commute-trip__bar-wrapper svg {
+    margin: 3px;
+}
+
+/* barre de la barre de trajet */
+.commute-trip__bar {
+    height: 6px;
+    border-radius: 6px;
+    background-color: var(--color-primary);
+    flex-grow: 1;
+}
+
+.commute-trip__time {
+    font-weight: 600;
+}
+
+.commute-trip__checkbox-label {
+    background-color: rgb(209, 209, 209);
+    padding: 14px;
+    margin-left: 10px;
+    border-radius: 20px;
+    line-height: 10px;
+    border: 1px solid rgb(160, 160, 160);
+    cursor: pointer;
+}
+
+.commute-trip__checkbox-input {
+    display: none;
+}
+
+/* conteneur de l'arrivée et de la destination */
+.commute-trip__details {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.commute-trip__details span {
+    align-items: center;
+}
+
+.commute-trip__details span .u-icon {
+    margin-right: 3px;
+    width: var(--icon-sm);
+}
+
+.commute-trip hr {
+    height: 1px;
+    color: rgb(255, 255, 255);
+    margin: 10px 0;
+}
+
+/* informations concernant le passager ou le conducteur */
+.commute-trip__person {
+    display: inline-flex;
+    width: fit-content;
+    margin: 5px 40px 5px 0;
+}
+
+.commute-trip__name-rating {
+    display: flex;
+    flex-direction: column;
+}
+
+.commute-trip__img {
+    height: 36px;
+    width: 36px;
+    border-radius: 36px;
+    overflow: hidden;
+    margin-right: 10px;
+}
+
+.commute-trip__name-rating span:first-child {
+    font-weight: 600;
+}
+
+.commute-trip__more-details-button {
+    position: absolute;
+    inset: 0;
+}
+
+.commute-trip__more-details-button-visible {
+    display: block;
+    width: 100%;
+    padding-top: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-primary);
+}
+
+/* @media screen and (min-width:950px) {
+    .commute-trip__more-details-button-visible {
+        display: none;
+    }
+} */
+
+.commute-trip__more-details-modal {
+    height: 100vh;
+    position: fixed;
+    inset: 0;
+    background-color: var(--background-color);
+    display: none;
+}
+
+/* ------------- Layout - page d'accueil - ordinateur ------------- */
+
+@media screen and (min-width: 950px) {
+    .home-page-layout {
+        display: flex;
+        gap: var(--spacing-lg);
+    }
+    .notifications {
+        width: 40%;
+    }
+    .notifications__open-button, .notifications__close-modal-button {
+        display: none;
+    }
+    .notifications__content {
+        position: initial;
+        display: block;
+        padding: 0;
+    }
+    .main {
+        width: calc(60% - var(--spacing-lg));
+    }
+    .commute-trip__more-details-modal {
+        inset: 0 0 0 auto;
+        width: 40%;
+        max-width: 700px;
+    }
+}
+
+/* ------------- Profil - page profil ------------- */
+
+.profile {
+    color: var(--text-color);
+}
+
+.profile__previous-page {
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+}
+
+.profile__previous-page svg {
+    width: 30px;
+    margin-right: 6px;
+}
+
+.profile__img {
+    width: 30%;
+    max-width: 150px;
+    border-radius: 150px;
+    margin: var(--spacing-lg) auto;
+    aspect-ratio: 1/1;
+}
+
+.profile__name-rating {
+    display: flex;
+    justify-content: space-between;
+}
+
+.profile__name, .profile__rating {
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.profile__name {
+    padding-right: var(--spacing-sm);
+}
+
+.profile__description {
+    margin-bottom: var(--spacing);
+}
+
+.profile__vehicle, .profile__driving-license {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--spacing-sm);
+    font-weight: 600;
+}
+
+.profile__vehicle svg, .profile__driving-license svg {
+    height: auto;
+    margin-right: 10px;
+    width: 25px;
+}
+
+.profile__preferences-title {
+    font-size: 1.1rem;
+    margin-top: var(--spacing-lg);
+}
+
+.profile__preferences-list {
+    line-height: var(--spacing);
+}
+
+/* ------------- Mon compte - page mon compte ------------- */
+
+.account svg {
+    width: 25px;
+}
+
+.account li {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid gray;
+    padding: 0 10px;
+}
+
+.account__profile-title, .account__legal-framework-title {
+    margin-bottom: var(--spacing-sm);
+}
+
+.account__profile-links, .account__legal-framework-links {
+    margin-bottom: var(--spacing-lg);
+}
+
+.account__profile-link, .account__legal-framework-link {
+    padding: 14px;
+    color: var(--text-color);
+    display: inline-block;
+    width: 100%;
+}
+
+.account__delete-account-button {
+    color: rgb(217, 16, 16);
+    margin: 20px auto 0;
+    display: block;
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+/* ------------- Mes informations - page mes informations ------------- */
+
+.personal-information__form {
+    width: 100%;
+}
+
+.personal-information__pp {
+    position: relative;
+    width: 30%;
+    max-width: 150px;
+    margin: var(--spacing-lg) auto;
+}
+
+.personal-information__pp-img-wrapper {
+    border-radius: 150px;
+    aspect-ratio: 1/1;
+}
+
+.personal-information__pp-label {
+    aspect-ratio: 1/1;
+}
+
+.personal-information__pp-label svg {
+    width: 50px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    color: var(--color-primary);
+    cursor: pointer;
+}
+
+.personal-information__pp-input {
+    display: none;
+}
+
+.personal-information__label {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 25px;
+}
+
+.personal-information__input {
+    border: none;
+    border-bottom: 1px solid gray;
+    padding: 10px;
+    margin-top: 8px;
+    border-radius: 4px;
+    font-size: 1rem;
+    background-color: #00000000;
+}
+
+/* ------------- Recherche de covoiturage - page rechercher covoiturage ------------- */
+
+.search-commute {
+    display: flex;
+}
+
+.search-commute__form {
+    width: 100%;
+}
+
+/* ------------- Préférences - page préférences ------------- */
+
+.preferences__p {
+    margin-bottom: var(--spacing);
+}
+
+.preferences__list-item {
+    font-size: 1.05rem;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-sm);
+}
+
+.preferences__list-item a {
+    font-size: 1.3rem;
+    color: black;
+}
+
+.preferences__ajout-form select {
+    padding: 5px 10px 5px 0;
+    border: none;
+    background-color: #00000000;
+}
+
+.preferences__ajout-form input{
+    border: none;
+    background-color: var(--color-primary);
+    color: white;
+    font-weight: 600;
+    border-radius: 20px;
+    margin-left: 10px;
+    padding: 8px;
+}
+
+/* ------------- Feedback - page feedback ------------- */
+
+.feedback {
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.feedback__icon {
+    font-size: 4rem;
+    margin-bottom: var(--spacing);
+}
+
+.feedback__title {
+    font-size: 1.5rem;
+}
+
+.feedback__message {
+    text-align: center;
+    margin-bottom: var(--spacing);
+}
+
+/* ------------- Proposer un trajet - page choose address - conducteur ------------- */
+
+.choose-address__form {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing);
+}
+
+.choose-address__type-fieldset {
+    width: 100%;
+    display: flex;
+    gap: var(--spacing);
+}
+
+.choose-address__type-legend {
+    margin-bottom: var(--spacing-sm);
+}
+
+.choose-address__type-label {
+    padding: 30px 10px;
+    text-align: center;
+    border: 2px solid var(--color-primary);
+    color: var(--color-primary);
+    text-transform: uppercase;
+    font-weight: 600;
+    border-radius: 10px;
+    width: calc(50% - calc(var(--spacing) / 2));
+    cursor: pointer;
+    display: block;
+}
+
+.choose-address__type-radio {
+    opacity: 1;
+}
+
+.choose-address__type-radio--checked {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.choose-address__departure, .choose-address__arrival {
+    width: calc(50% - calc(var(--spacing) / 2));
+    display: none;
+}
+
+.choose-address__input {
+    width: 100%;
+    max-width: 100%;
+    border: 1px solid rgb(170, 170, 170);
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 10px;
+    line-height: 1.2;
+}
+
+.choose-address__suggestions {
+    background-color: white;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 10000;
+    width: 100%;
+}
+
+/* ------------- Proposer un trajet - page choose times - conducteur ------------- */
+
+.choose-times__addresses-summary {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.choose-times__addresses-decoration {
+    background-color: var(--color-primary);
+    height: 4px;
+    border-radius: 3px;
+    flex-grow: 1;
+}
+
+.choose-times__departure-place, .choose-times__arrival-place {
+    max-width: 30%;
+}
+
+.choose-times__place-label {
+    font-weight: 700;
+}
+
+.choose-times__day-legend {
+    text-transform: capitalize;
+}
+
+/* ------------- API map ------------- */
+
+#map {
+    width: 100%;
+    aspect-ratio: 1/1;
+}
+
+.commute-trip__modal-content {
+    width: 100%;
+}
+
+.suggestion-item {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.suggestion-item:hover {
+    background-color: #f0f0f0;
+}
+
+/* ----------------------------------------- */
+
+/* doit rester en bas du code */
+.u-visible {
+    display: block;
+}
