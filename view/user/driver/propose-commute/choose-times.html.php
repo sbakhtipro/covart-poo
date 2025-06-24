@@ -11,7 +11,6 @@
 </head>
 
 <body class="u-driver-theme">
-    <?php require_once ROOT . '/template/partials/_header.html.php' ?>    
 
     <main class="choose-times u-container-sm" id="main">
         <h1 class="choose-times__title">Choix des horaires</h1>

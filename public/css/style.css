@@ -838,14 +838,37 @@ img:not(.u-icon) { /* ajuste toute les images sauf .u-icon pour qu'elles remplis
     border-radius: 5px;
     margin-top: 10px;
     line-height: 1.2;
+    position: relative;
 }
 
-.choose-address__suggestions {
+/* .choose-address__suggestions {
     background-color: white;
     max-height: 200px;
     overflow-y: auto;
     z-index: 10000;
     width: 100%;
+} */
+
+.choose-address__suggestions {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #ccc;
+    width: calc(50% - var(--spacing));
+    background: white;
+    position: absolute;
+    z-index: 1000;
+    /* top: 0;
+    left: 0; */
+}
+
+#results li {
+    padding: 8px;
+    cursor: pointer;
+}
+
+#results li:hover {
+    background-color: #eee;
 }
 
 /* ------------- Proposer un trajet - page choose times - conducteur ------------- */

@@ -14,7 +14,7 @@
                 <span class="nav__icon nav__close-icon">&#10006;</span>
             </button>
             <ul class="nav__links-list">
-                <li class="nav__item"><a href="/index.php?page=<?= escapeForHtml($_SESSION['role']) ?>-index" class="nav__link">Accueil</a></li>
+                <li class="nav__item"><a href="/index.php?controller=<?= escapeForHtml($_SESSION['role']) ?>-index&method=home" class="nav__link">Accueil</a></li>
                 <li class="nav__item"><a href="/index.php?page=user-account" class="nav__link">Mon compte</a></li>
                 <li class="nav__item"><a href="/index.php?controller=user&method=logout" class="nav__link">Déconnexion</a></li>
             </ul>

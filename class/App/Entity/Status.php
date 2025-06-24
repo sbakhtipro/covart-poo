@@ -2,10 +2,10 @@
 
 namespace App\Entity;
 
-class CommuteType {
+class Status {
 
     private $id;
-    private string $name;
+    private ?string $name;
 
     public function setId($id): void {
         $this->id = $id;

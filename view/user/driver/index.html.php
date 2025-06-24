@@ -67,8 +67,8 @@
         <main class="main" id="main">
             <h1>Espace conducteur</h1>
             <div class="main__links">
-                <a href="index.php?page=passenger-index" class="main__switch u-passenger-theme">Je suis passager</a>
-                <a href="index.php?page=choose-address" class="main__search">Proposer un trajet</a>
+                <a href="index.php?controller=driver-index&method=home&role=passenger" class="main__switch u-passenger-theme">Je suis passager</a>
+                <a href="index.php?controller=propose-commute&method=choose-address" class="main__search">Proposer un trajet</a>
                 <a href="index.php?page=proposed-commutes" class="main__see-proposed-commutes">Voir mes trajets proposés -></a>
             </div>
 

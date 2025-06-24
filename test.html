@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Autocomplétion Adresse</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+        }
+
+        #search {
+            width: 300px;
+            padding: 8px;
+        }
+
+        #results {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            border: 1px solid #ccc;
+            max-width: 300px;
+            background: white;
+            position: absolute;
+            z-index: 1000;
+        }
+
+        #results li {
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        #results li:hover {
+            background-color: #eee;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Recherche d'adresse</h2>
+    <input type="text" id="search" placeholder="Entrez une adresse..." autocomplete="off" />
+    <ul id="results"></ul>
+
+    <!-- <script>
+    const input = document.getElementById('search');
+    const results = document.getElementById('results');
+
+    input.addEventListener('input', async () => {
+      const query = input.value.trim();
+      if (query.length < 3) {
+        results.innerHTML = '';
+        return;
+      }
+
+      const res = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(query)}&limit=5`);
+      const data = await res.json();
+
+      results.innerHTML = '';
+      data.features.forEach(feature => {
+        const li = document.createElement('li');
+        li.textContent = feature.properties.label;
+        li.addEventListener('click', () => {
+          input.value = feature.properties.label;
+          results.innerHTML = '';
+        });
+        results.appendChild(li);
+      });
+    });
+  </script> -->
+    <script>
+        const input = document.getElementById('search');
+        const results = document.getElementById('results');
+
+        input.addEventListener('input', function () {
+            const query = input.value.trim();
+
+            if (query.length < 3) {
+                results.innerHTML = '';
+                return;
+            }
+
+            fetch('https://api-adresse.data.gouv.fr/search/?q='
+             + encodeURIComponent(query) 
+             + '&limit=5'
+            )
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                results.innerHTML = '';
+
+                for (let i = 0; i < data.features.length; i++) {
+                    const feature = data.features[i];
+                    const li = document.createElement('li');
+                    li.textContent = feature.properties.label;
+
+                    li.addEventListener('click', function () {
+                        input.value = feature.properties.label;
+                        results.innerHTML = '';
+                    });
+
+                    results.appendChild(li);
+                }
+            });
+        });
+    </script>
+
+
+
+</body>
+
+</html>

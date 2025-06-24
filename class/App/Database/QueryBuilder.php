@@ -15,6 +15,23 @@ class QueryBuilder {
     public ?array $bindings = [];
     public ?string $sql = '';
 
+     /**
+     * Réinitialiser les propriétés après une requête
+     * @return void
+     */
+    private function reset(): void {
+        $this->table = null;
+        $this->select = null;
+        $this->insertInto = null;
+        $this->delete = null;
+        $this->update = null;
+        $this->from = null;
+        $this->joinOn = null;
+        $this->where = null;
+        $this->bindings = [];
+        $this->sql = '';
+    }
+
     /**
      * Définir la table sur laquelle on applique la requête initialement
      * @param string $table
@@ -147,14 +164,11 @@ class QueryBuilder {
      * @return void
      */
     public function query(): array {
-        $this->sql .= $this->select . $this->insertInto . $this->delete . $this->update . $this->from . $this->joinOn . $this->where;
-        var_dump($this->sql);
-        // var_dump($this->bindings);
-        // exit;
+        $this->sql = $this->select . $this->insertInto . $this->delete . $this->update . $this->from . $this->joinOn . $this->where;
         $stmt = Database::getDb()->prepare($this->sql);
         $stmt->execute($this->bindings);
         $data = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        var_dump($data);
+        $this->reset();
         return $data;
     }
 

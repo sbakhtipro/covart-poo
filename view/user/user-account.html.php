@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body class="u-<?= hsc($_SESSION['role']) ?>-theme">
-    <?php require_once ROOT . '/template/partials/_header.html.php' ?>
 
     <main class="account u-container-sm" id="main">
         <h1 class="account__title">Mon compte</h1>

@@ -10,17 +10,16 @@
     <script src="/js/propose-commute.js" defer></script>
 </head>
 
-<body class="u-driver-theme">
-    <?php require_once ROOT . '/template/partials/_header.html.php' ?>    
+<body class="u-driver-theme">   
 
     <main class="choose-address u-container-sm" id="main">
         <h1 class="choose-address__title">Choix de l'adresse</h1>
-        <form action="/index.php?page=choose-times" method="POST" class="choose-address__form">
+        <form action="index.php?controller=proposed-commute&method=save-step1-data" method="POST" class="choose-address__form">
             <fieldset class="choose-address__type-fieldset">
                 <legend class="choose-address__type-legend">Choisir le type de trajet :</legend>
-                <?php foreach($commuteTypes as $type) { ?>
+                <?php foreach($types as $type) { ?>
                     <label class="choose-address__type-label">
-                        <input tabindex="0" class="choose-address__type-radio" type="radio" name="commute-type" id="<?= hsc($type['type_trajet_nom']) ?>" value="<?= hsc($type['type_trajet_nom']) ?>" required><?= hsc($type['type_trajet_nom']) ?>
+                        <input tabindex="0" class="choose-address__type-radio" type="radio" name="commute-type" id="<?= $type->getName() ?>" value="<?= $type->getName() ?>" required><?= $type->getName() ?>
                     </label>
                 <?php } ?>
             </fieldset>
@@ -28,10 +27,9 @@
             <div class="choose-address__arrival"></div>
             <input type="hidden" id="coordonnees-list" name="coordonnees-list" />
             <input type="hidden" id="coordonnees-input" name="coordonnees-input" />
-            <input type="submit" value="Suivant" class="u-action u-action-primary"/>
+            <input type="submit" value="Suivant" id="submit" class="u-action u-action-primary" style="display: none;"/>
         </form>
-
-        <?php require_once ROOT . '/template/partials/_map.html.php'; ?>
+        <!-- <script src="/js/autofill.js" defer></script> -->
     </main>
 </body>
 </html>

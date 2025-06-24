@@ -1,5 +1,7 @@
 <?php
 
+// protection role dans router?
+
 namespace App\Router;
 
 abstract class Router {
@@ -7,29 +9,82 @@ abstract class Router {
     public static function run() {
         if (empty($_GET)) {
             require ROOT . "/view/public/home.html.php";
-            // return true;
         }
  
-        else if (!isset($_GET["controller"]) || !isset($_GET["method"])) {
-            require ROOT . "/view/public/404.html.php";
-            // return false;
+        else if (!isset($_GET['controller']) || !isset($_GET['method'])) {
+            require ROOT . '/view/public/404.html.php';
         }
 
-        $controller = $_GET["controller"];
-        $method = $_GET["method"];
-
-        if ($controller === "user" && $method === "login") {
+        else if ($_GET['method'] !== 'login' && (empty($_SESSION['id']) || empty($_SESSION['role']))) {
             $page = new \App\Controller\User();
             $page->login();
             return $page;
         }
 
-        if ($controller === "driver-index" && $method === "home") {
-            $page = new \App\Controller\Home();
-            $page->home();
+        $controller = $_GET['controller'];
+        $method = $_GET['method'];
+
+        if ($controller === 'user' && $method === 'login') {
+            $page = new \App\Controller\User();
+            $page->login();
             return $page;
         }
 
+        if ($controller === 'user' && $method === 'logout') {
+            $page = new \App\Controller\User();
+            $page->logout();
+            return $page;
+        }
+
+        if ($controller === 'driver-index' && $method === 'home') {
+            $role = new \App\Auth\UserAuth();
+            $role->isDriver();
+            $page = new \App\Controller\Home();
+            if (isset($_GET['role'])) {
+                $page->switchRole($_GET['role']);
+            }
+            $page->displayHome($_SESSION['role'],$_SESSION['id']);
+            return $page;
+        }
+
+        if ($controller === 'passenger-index' && $method === 'display-home') {
+            $page = new \App\Controller\Home();
+            if (isset($_GET['role'])) {
+                $page->switchRole($_GET['role']);
+            }
+            $page->displayHome($_SESSION['role'],$_SESSION['id']);
+            return $page;
+        }
+
+        if ($controller === 'license-verify' && $method === 'license-verify') {
+            $page = new \App\Controller\LicenseVerify();
+            $page->licenseVerify();
+            return $page;
+        }
+
+        if ($controller === 'propose-commute' && $method === 'choose-address') {
+            $page = new \App\Controller\ProposedCommute();
+            $page->chooseAddress();
+            return $page;
+        }
+
+        if ($controller === 'proposed-commute' && $method === 'fetch-addresses') {
+            $page = new \App\Controller\ProposedCommute();
+            $page->fetchAddresses();
+            return $page;
+        }
+
+        if ($controller === 'proposed-commute' && $method === 'save-step1-data') {
+            $page = new \App\Controller\ProposedCommute();
+            $page->saveStep1Data();
+            return $page;
+        }
+
+        if ($controller === 'proposed-commute' && $method === 'choose-times') {
+            $page = new \App\Controller\ProposedCommute();
+            $page->chooseTimes();
+            return $page;
+        }
 
         // if ($controller == "product" && $method == "listing")
         // return (new \App\Controller\Product())->listing();

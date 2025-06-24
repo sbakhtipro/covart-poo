@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="../style.css">
 </head>
 <body class="u-passenger-theme">
-    <?php require_once ROOT . '/template/partials/_header.html.php' ?>
 
     <main class="history u-container-sm" id="main">
         <h1 class="history__title">Historique</h1>

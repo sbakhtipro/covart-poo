@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autofill test</title>
+</head>
+<body>
+    <h1>Autofill</h1>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+        }
+
+        #search {
+            width: 300px;
+            padding: 8px;
+        }
+
+        #results {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            /* border: 1px solid #ccc; */
+            max-width: 300px;
+            background: white;
+            position: absolute;
+            z-index: 1000;
+        }
+
+        #results li {
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        #results li:hover {
+            background-color: #eee;
+        }
+    </style>
+    <input type="search" id="search" placeholder="Entrez l'adresse">
+    <div id="results"></div>
+    
+    <script>
+
+        function addLi(array) {
+            results.innerHTML = ''
+            array.forEach(element => {
+                let li = document.createElement('li')
+                li.textContent = element['properties']['label']
+                results.appendChild(li)
+            })
+        }
+
+        const input = document.getElementById('search')
+        const results = document.getElementById('results')
+
+        input.addEventListener('input', () => {
+
+            let query = input.value.trim()
+
+            if (query.length < 3) {
+                return '';
+            }
+
+            fetch('https://api-adresse.data.gouv.fr/search/?q=' + encodeURIComponent(query) + '&limit=6')
+                .then(response => response.json())
+                .then(data => console.log(data['features']))
+
+        })
+
+    </script>
+</body>
+</html>

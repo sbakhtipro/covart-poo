@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="../style.css">
 </head>
 <body class="u-passenger-theme">
-    <?php require_once ROOT . '/template/partials/_header.html.php' ?>
 
     <main class="vehicle u-container-sm" id="main">
         <h1 class="vehicle__title">Mon véhicule</h1>

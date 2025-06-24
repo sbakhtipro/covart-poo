@@ -7,8 +7,7 @@
     <link rel="stylesheet" href="../style.css">
 </head>
 <body class="u-passenger-theme">
-    <?php require_once ROOT . '/template/partials/_header.html.php' ?>
-
+    
     <main class="feedback u-container-sm" id="main">
         <?php if ($_SESSION['role'] === 1 && $feedback) ?>
         <!-- <a href="" class="u-action u-action-primary"></a> -->

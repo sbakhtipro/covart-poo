@@ -6,16 +6,16 @@ namespace App\Model;
 
 class Agencies extends Model {
 
-    public $addresses = [];
+    public $agencies = [];
 
-    public function getAllAddresses(): array {
-        $addresses = $this->queryBuilder
+    public function getAllAddresses() {
+        $this->agencies = [];
+        $recordset = $this->queryBuilder
             ->table('agences')
-            ->select(['agence_numero_voie','agence_voie','agence_ville','agence_code_postal'])
+            ->select(['agence_numero_voie','agence_voie','agence_ville','agence_code_postal','agence_lat','agence_lon'])
             ->from()
             ->query();
-        $this->addresses = $addresses;
-        return $this->addresses;
+        return $recordset;
     }
-
+    
 }

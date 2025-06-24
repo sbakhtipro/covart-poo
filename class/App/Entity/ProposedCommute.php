@@ -5,16 +5,17 @@ namespace App\Entity;
 class ProposedCommute {
 
     private $id;
-    private string $arrivalPlace;
-    private float $arrivalPlaceLat;
-    private float $arrivalPlaceLon;
-    private string $departurePlace;
-    private float $departurePlaceLat;
-    private float $departurePlaceLon;
-    private \DateTime $departureTime;
-    private bool $suppression = false;
+    private ?string $arrivalPlace;
+    private ?float $arrivalPlaceLat;
+    private ?float $arrivalPlaceLon;
+    private ?string $departurePlace;
+    private ?float $departurePlaceLat;
+    private ?float $departurePlaceLon;
+    private ?\DateTime $departureTime;
+    private ?bool $suppression = false;
     private ?\DateTime $suppressionTime = null;
-
+    private $commuteTypeId;
+    private $employeeId;
     
     public function setId($id): void {
         $this->id = $id;
@@ -96,4 +97,25 @@ class ProposedCommute {
     public function getSuppressionTime(): ?\DateTime {
         return $this->suppressionTime;
     }
+
+    public function setCommuteTypeId($commuteTypeId): void {
+        $this->commuteTypeId = $commuteTypeId;
+    }
+    public function getCommuteTypeId(bool $raw = false) {
+        if ($raw) {
+            return $this->commuteTypeId;
+        }
+        return escapeForHtml($this->commuteTypeId);
+    }
+
+    public function setEmployeeId($employeeId): void {
+        $this->employeeId = $employeeId;
+    }
+    public function getEmployeeId(bool $raw = false) {
+        if ($raw) {
+            return $this->employeeId;
+        }
+        return escapeForHtml($this->employeeId);
+    }
+
 }     

@@ -2,7 +2,7 @@
 
 namespace App\Auth;
 
-class UserAuth {
+class UserAuth extends Auth {
 
     public function login($userInformations, $inputPassword): bool {
         if (password_verify($inputPassword, $userInformations['utilisateur_mdp'])) {
@@ -14,5 +14,23 @@ class UserAuth {
         }
         return false;
     }
+
+    public function isAdmin() {
+        return isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
+    }
+
+    public function isPassenger() {
+        return isset($_SESSION['role']) && isset($_SESSION['id']) && ($_SESSION['role'] === 'passenger' || $_SESSION['role'] === 'driver');
+    }
+
+    public function isDriver() {
+        if (isset($_SESSION['role']) && isset($_SESSION['id']) && ($_SESSION['role'] === 'passenger' || $_SESSION['role'] === 'driver') && $_SESSION['permis_verifie'] === 0) {
+            // $this->redirect('/index.php?controller=license-verify');
+            $this->redirect('/index.php?controller=license-verify&method=license-verify');
+        }
+        return isset($_SESSION['role']) && isset($_SESSION['id']) && ($_SESSION['role'] === 'passenger' || $_SESSION['role'] === 'driver') && $_SESSION['permis_verifie'] === 1;
+    }
+
+   
 
 }
