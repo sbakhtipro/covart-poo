@@ -7,19 +7,19 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
     <link rel="stylesheet" href="/css/style.css" />
-    <script src="/js/propose-commute.js" defer></script>
+    <script src="/js/choose-address.js" defer></script>
 </head>
 
 <body class="u-driver-theme">   
 
     <main class="choose-address u-container-sm" id="main">
         <h1 class="choose-address__title">Choix de l'adresse</h1>
-        <form action="index.php?controller=proposed-commute&method=save-step1-data" method="POST" class="choose-address__form">
+        <form action="index.php?controller=propose-commute&method=save-step1-data" method="POST" class="choose-address__form">
             <fieldset class="choose-address__type-fieldset">
                 <legend class="choose-address__type-legend">Choisir le type de trajet :</legend>
                 <?php foreach($types as $type) { ?>
                     <label class="choose-address__type-label">
-                        <input tabindex="0" class="choose-address__type-radio" type="radio" name="commute-type" id="<?= $type->getName() ?>" value="<?= $type->getName() ?>" required><?= $type->getName() ?>
+                        <input tabindex="0" class="choose-address__type-radio" type="radio" name="commute-type" id="<?= $type->getName() ?>" value="<?= $type->getId() ?>" required><?= $type->getName() ?>
                     </label>
                 <?php } ?>
             </fieldset>

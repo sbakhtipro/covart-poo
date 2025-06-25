@@ -5,6 +5,11 @@ function addLi(array) {
 		li.textContent = element['properties']['label']
 		results.appendChild(li)
 	})
+	if (array.length < 1) {
+		let li = document.createElement('li')
+		li.textContent = 'Aucun résultat'
+		results.appendChild(li)
+	}
 }
 
 const input = document.getElementById('address')

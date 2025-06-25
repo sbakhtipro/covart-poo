@@ -6,14 +6,13 @@ let data = null;
 async function fetchAddresses() {
   try {
     const response = await fetch(
-      "index.php?controller=proposed-commute&method=fetch-addresses"
+      "index.php?controller=propose-commute&method=fetch-addresses"
     );
     if (!response.ok) {
       throw new Error("Données non récupérées");
     }
     console.log(response);
     data = await response.json();
-    console.log(data);
     displayAddresses();
   } catch (error) {
     console.error("Données non récupérées : ", error);
@@ -25,7 +24,6 @@ function getResults() {
   const hiddenInput = document.getElementById("coordonnees-input");
   const results = document.getElementById("results");
   input.addEventListener("input", () => {
-    console.log("test");
     let query = input.value.trim();
     if (query.length < 3) {
       return "";
@@ -37,7 +35,7 @@ function getResults() {
     )
       .then((response) => response.json())
       .then((data) => {
-        results.innerHTML = "";
+        results.innerHTML = ""
         data["features"].forEach((element) => {
           let li = document.createElement("li");
           li.textContent = element["properties"]["label"];
@@ -54,6 +52,11 @@ function getResults() {
             }
           });
         });
+        if (results.innerHTML === "") {
+            let noResult = document.createElement("li")
+            noResult.textContent = 'Aucun résultat'
+            results.appendChild(noResult);
+          }
       });
   });
 }
@@ -65,7 +68,6 @@ function setSelectCoordinates() {
   hiddenList.value = selected.dataset.coordonnees;
   list.addEventListener("change", () => {
     hiddenList.value = selected.dataset.coordonnees;
-    console.log("test");
   });
 }
 
@@ -88,7 +90,8 @@ function createInputs(isC, isntC, hasI, hasS, adressInput, adressList) {
         `<label class="choose-address__label" for="address-input">${hasI.fr} :</label>` +
         adressInput;
       hasSelect.innerHTML =
-        `<label class="choose-address__label">${hasS.fr} :</label>` + adressList;
+        `<label class="choose-address__label">${hasS.fr} :</label>` +
+        adressList;
       getResults();
       setSelectCoordinates();
     }
@@ -105,8 +108,22 @@ function displayAddresses() {
             `;
     });
     adressList += `</select>`;
-    createInputs('aller','retour', {'fr':'Départ','en':'departure'},{'fr':'Arrivée','en':'arrival'},adressInput,adressList)
-    createInputs('retour','aller',{'fr':'Arrivée','en':'arrival'}, {'fr':'Départ','en':'departure'},adressInput,adressList)
+    createInputs(
+      "aller",
+      "retour",
+      { fr: "Départ", en: "departure" },
+      { fr: "Arrivée", en: "arrival" },
+      adressInput,
+      adressList
+    );
+    createInputs(
+      "retour",
+      "aller",
+      { fr: "Arrivée", en: "arrival" },
+      { fr: "Départ", en: "departure" },
+      adressInput,
+      adressList
+    );
   }
 }
 

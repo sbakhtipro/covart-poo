@@ -36,7 +36,7 @@ abstract class Router {
             return $page;
         }
 
-        if ($controller === 'driver-index' && $method === 'home') {
+        if ($controller === 'driver-home' && $method === 'display-home') {
             $role = new \App\Auth\UserAuth();
             $role->isDriver();
             $page = new \App\Controller\Home();
@@ -47,7 +47,7 @@ abstract class Router {
             return $page;
         }
 
-        if ($controller === 'passenger-index' && $method === 'display-home') {
+        if ($controller === 'passenger-home' && $method === 'display-home') {
             $page = new \App\Controller\Home();
             if (isset($_GET['role'])) {
                 $page->switchRole($_GET['role']);
@@ -63,26 +63,32 @@ abstract class Router {
         }
 
         if ($controller === 'propose-commute' && $method === 'choose-address') {
-            $page = new \App\Controller\ProposedCommute();
+            $page = new \App\Controller\ProposeCommute();
             $page->chooseAddress();
             return $page;
         }
 
-        if ($controller === 'proposed-commute' && $method === 'fetch-addresses') {
-            $page = new \App\Controller\ProposedCommute();
+        if ($controller === 'propose-commute' && $method === 'fetch-addresses') {
+            $page = new \App\Controller\ProposeCommute();
             $page->fetchAddresses();
             return $page;
         }
 
-        if ($controller === 'proposed-commute' && $method === 'save-step1-data') {
-            $page = new \App\Controller\ProposedCommute();
+        if ($controller === 'propose-commute' && $method === 'save-step1-data') {
+            $page = new \App\Controller\ProposeCommute();
             $page->saveStep1Data();
             return $page;
         }
 
-        if ($controller === 'proposed-commute' && $method === 'choose-times') {
-            $page = new \App\Controller\ProposedCommute();
+        if ($controller === 'propose-commute' && $method === 'choose-times') {
+            $page = new \App\Controller\ProposeCommute();
             $page->chooseTimes();
+            return $page;
+        }
+
+        if ($controller === 'propose-commute' && $method === 'save-step2-data') {
+            $page = new \App\Controller\ProposeCommute();
+            $page->saveStep2Data();
             return $page;
         }
 

@@ -873,7 +873,7 @@ img:not(.u-icon) { /* ajuste toute les images sauf .u-icon pour qu'elles remplis
 
 /* ------------- Proposer un trajet - page choose times - conducteur ------------- */
 
-.choose-times__addresses-summary {
+/* .choose-times__addresses-summary {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
@@ -884,18 +884,66 @@ img:not(.u-icon) { /* ajuste toute les images sauf .u-icon pour qu'elles remplis
     height: 4px;
     border-radius: 3px;
     flex-grow: 1;
+} */
+
+.choose-times {
+    display: flex;
+    flex-direction: column;
 }
 
-.choose-times__departure-place, .choose-times__arrival-place {
-    max-width: 30%;
-}
-
-.choose-times__place-label {
-    font-weight: 700;
-}
-
-.choose-times__day-legend {
+.choose-times__days-legend {
     text-transform: capitalize;
+    font-size: 1.25rem;
+    color: var(--title-color);
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.choose-times__day-container {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.choose-times input[type=time] {
+    border: none;
+    background-color: #00000000;
+    margin-left: 5px;
+    font-family: 'Poppins';
+    font-size: 1.04rem;
+    margin-bottom: 15px;
+    width: fit-content;
+}
+
+.choose-times__day-label {
+    font-size: 1.06rem;
+    font-weight: 600;
+    text-transform: capitalize;
+    color: rgb(48, 48, 48);
+    cursor: pointer;
+}
+
+.choose-times__day-container input[type=checkbox] {
+    opacity: 0;
+    margin-right: 10px;
+    cursor: pointer;
+}
+ 
+.choose-times__checkbox-container {
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    border: 2px solid var(--color-primary);
+    background-color: white;
+    position: absolute;
+    top: 2px;
+    left: 0;
+}
+
+.choose-times__checkbox-svg {
+    width: 100%;
+    color: var(--color-primary);
+    display: none;
 }
 
 /* ------------- API map ------------- */

@@ -23,10 +23,10 @@ class User extends Controller {
                         if (!$this->userAuth->isDriver()) {
                             $this->redirect("/index.php?controller=user&method=login");
                         }
-                        $this->redirect("/index.php?controller=" . $_SESSION['role'] . "-index&method=display-home");
+                        $this->redirect("/index.php?controller=" . $_SESSION['role'] . "-home&method=display-home");
                     }
                     else {
-                        $this->redirect("/index.php?controller=" . $_SESSION['role'] . "-index&method=display-home");
+                        $this->redirect("/index.php?controller=" . $_SESSION['role'] . "-home&method=display-home");
                     } 
                 }
                 else {
