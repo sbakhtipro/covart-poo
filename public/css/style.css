@@ -821,8 +821,45 @@ img:not(.u-icon) { /* ajuste toute les images sauf .u-icon pour qu'elles remplis
     display: block;
 }
 
+.choose-address__type-label.disabled {
+    border: 2px solid gray;
+    color: gray;
+    cursor: default;
+}
+
+.choose-address__disabled-type-details {
+    display: inline;
+    position: relative;
+}
+
+.choose-address__disabled-type-span {
+    position: absolute;
+    display: none;
+    left: 0;
+    bottom: 0;
+    transform: translate(-50%,100%);
+    text-transform: none;
+    font-weight: 500;
+    color: black;
+    background-color: white;
+    border: 1px solid gray;
+    border-radius: 5px;
+    width: 200px;
+    padding: 10px;
+}
+
+.choose-address__disabled-type-span.visible {
+    display: block;
+}
+
+.choose-address__disabled-type-button svg {
+    width: 1rem;
+    color: gray;
+}
+
 .choose-address__type-radio {
-    opacity: 1;
+    /* opacity: 0; */
+    visibility: hidden;
 }
 
 .choose-address__type-radio--checked {
@@ -976,11 +1013,12 @@ img:not(.u-icon) { /* ajuste toute les images sauf .u-icon pour qu'elles remplis
 
 /* ------------- Proposer un trajet - page summary - conducteur ------------- */
 
-.addresses__item {
+.addresses__item, .vehicle__item {
     margin-bottom: 10px;
+    display: block;
 }
 
-.addresses__item-title {
+.addresses__item-title,.vehicle__item-title {
     font-weight: 600;
 }
 

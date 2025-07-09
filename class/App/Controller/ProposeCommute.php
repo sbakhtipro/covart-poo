@@ -4,60 +4,51 @@ namespace App\Controller;
 
 class ProposeCommute extends Controller {
 
-    public array $tableDays;
+    public array $tableDaysAller;
+    public array $tableDaysRetour;
 
     public function __construct() {
-        $this->tableDays = $_SESSION['table-days'] ?? [];
+        $this->tableDaysAller = $_SESSION['table-days-aller'] ?? [];
+        $this->tableDaysRetour = $_SESSION['table-days-retour'] ?? [];
+    }
+
+    private function checkStep1() {
+        if (empty($_SESSION['form-first-step']['arrival-address']) || empty($_SESSION['form-first-step']['departure-address']) || empty($_SESSION['form-first-step']['arrival-coordinates']['lat']) || empty($_SESSION['form-first-step']['arrival-coordinates']['lon']) || empty($_SESSION['form-first-step']['departure-coordinates']['lat']) || empty($_SESSION['form-first-step']['commute-type'])) {
+            $this->redirect('index.php?controller=propose-commute&method=choose-address');
+        }
+    }
+
+    private function checkStep2() {
+        if (empty($_SESSION['form-second-step']['passengers-number']) || empty($_SESSION['form-second-step']['vehicle'])) {
+            $this->redirect('index.php?controller=propose-commute&method=choose-vehicle');
+        }
     }
 
     public function startProposeCommute() {
         $getModelProposedCommutes = new \App\Model\ProposeCommute();
-        $proposedCommutes = $getModelProposedCommutes->getAllUserProposedCommutes(); 
-        $tableDays = $this->createTableDays();
-        $aller = 0;
-        $retour = 0;
-        foreach ($proposedCommutes as $proposedCommute) {
-            $dateFromObject = $proposedCommute->getDepartureTime();
-            $date = $dateFromObject->format('Y-m-d');
-            $type = $proposedCommute->getCommuteTypeId();
-            foreach ($tableDays as $key => $day) {
-                if ($date === $day['date']) {
-                    if ($type === 1) {
-                        $a
-                    }
-                    else if ($type === 2) {
-
-                    }
-                    unset($tableDays[$key]);
-                }
-            }
-        }
-        $_SESSION['table-days'] = $tableDays;
-        // var_dump($this->tableDays);
-        // exit;
+        $proposedCommutesAller = $getModelProposedCommutes->getAllUserProposedCommutes(1);
+        $proposedCommutesRetour = $getModelProposedCommutes->getAllUserProposedCommutes(2); 
+        $tableDaysAller = $this->arrayProposedCommutes($proposedCommutesAller);
+        $tableDaysRetour = $this->arrayProposedCommutes($proposedCommutesRetour);
+        $_SESSION['table-days-aller'] = $tableDaysAller;
+        $_SESSION['table-days-retour'] = $tableDaysRetour;
         $this->redirect('index.php?controller=propose-commute&method=choose-address');
     }
 
-        // public function startProposeCommute() {
-        //     $getModelProposedCommutes = new \App\Model\ProposeCommute();
-        //     $proposedCommutes = $getModelProposedCommutes->getAllUserProposedCommutes(); 
-        //     $tableDays = $this->createTableDays();
-        //     foreach ($proposedCommutes as $proposedCommute) {
-        //         $dateFromObject = $proposedCommute->getDepartureTime();
-        //         $date = $dateFromObject->format('Y-m-d');
-        //         $time = $dateFromObject->format('H:i');
-        //         foreach ($tableDays as $key => $day) {
-        //             if ($date === $day['date']) {
-        //                 // unset($tableDays[$key]);
-        //                 $tableDays[$key]['already-proposed-commute'] = 'Trajet proposé  à ' . $time;
-        //             }
-        //         }
-        //     }
-        //     $_SESSION['table-days'] = $tableDays;
-        //     // var_dump($this->tableDays);
-        //     // exit;
-        //     $this->redirect('index.php?controller=propose-commute&method=choose-address');
-        // }
+    private function arrayProposedCommutes($array) {
+        $tableDays = $this->createTableDays();
+        foreach ($array as $proposedCommute) {
+            $dateFromObject = $proposedCommute->getDepartureTime();
+            $date = $dateFromObject->format('Y-m-d');
+            $time = $dateFromObject->format('H:i');
+            foreach ($tableDays as $key => $day) {
+                if ($date === $day['date']) {
+                    $tableDays[$key]['already-proposed-commute'] = 'Trajet proposé  à ' . $time;
+                }
+            }
+        }
+        return $tableDays;
+    }
 
     public function fetchAddresses() {
         $getAddresses = new \App\Model\Agencies();
@@ -67,20 +58,34 @@ class ProposeCommute extends Controller {
     }
 
     public function chooseAddress() {
-        // var_dump($this->tableDays);
-        // exit;
         $getTypes = new \App\Model\CommuteTypes();
         $types = $getTypes->getCommuteTypes();
-        $this->render('user/driver/propose-commute/choose-address', compact('types'));
+        $aller = 0;
+        $retour = 0;
+        foreach ($this->tableDaysAller as $key => $day) {
+            if (isset($this->tableDaysAller[$key]['already-proposed-commute'])) {
+                $aller+=1;
+            }
+        }
+        foreach ($this->tableDaysRetour as $key => $day) {
+            if (isset($this->tableDaysRetour[$key]['already-proposed-commute'])) {
+                $retour+=1;
+            }
+        }
+        $availableTypes = [
+            'aller' => '0',
+            'retour' => '0'
+        ];
+        if ($aller<7) {
+            $availableTypes['aller'] = '1';
+        }
+        if ($retour<7) {
+            $availableTypes['retour'] = '1';
+        }
+        $this->render('user/driver/propose-commute/choose-address', compact('types','availableTypes'));
     }
 
     public function saveStep1Data() {
-        // var_dump($_POST['commute-type']);
-        // var_dump($_POST['input-address']);
-        // var_dump($_POST['list-address']);
-        // var_dump($_POST['coordonnees-list']);
-        // var_dump($_POST['coordonnees-input']);
-        // exit;
         if (empty($_POST['commute-type']) || empty($_POST['input-address']) || empty($_POST['list-address']) || empty($_POST['coordonnees-list']) || empty($_POST['coordonnees-input'])) {
             $this->redirect('index.php?controller=propose-commute&method=choose-address');
         }
@@ -90,17 +95,8 @@ class ProposeCommute extends Controller {
             $_SESSION['form-first-step']['arrival-address'] = $_POST['list-address'];
             $arrayDepartureCoordinates = explode(', ', $_POST['coordonnees-input']);
             $arrayArrivalCoordinates = explode(', ', $_POST['coordonnees-list']);
-            // $arrayArrivalCoordinates = explode(', ', $_POST['coordonnees-list']);
-            // var_dump($arrayArrivalCoordinates); // ← Ajoutez ceci pour voir le contenu
-            // var_dump(count($arrayArrivalCoordinates));
-            // exit;
-            // $_SESSION['form-first-step']['arrival-coordinates'] = [];
-            // $_SESSION['form-first-step']['departure-coordinates'] = [];
             $_SESSION['form-first-step']['arrival-coordinates']['lat'] = $arrayArrivalCoordinates[0];
             $_SESSION['form-first-step']['arrival-coordinates']['lon'] = $arrayArrivalCoordinates[1];
-            // var_dump($_SESSION['form-first-step']['arrival-coordinates']['lat']);
-            // var_dump($_SESSION['form-first-step']['arrival-coordinates']['lon']);
-            // exit;
             $_SESSION['form-first-step']['departure-coordinates']['lat'] = $arrayDepartureCoordinates[0];
             $_SESSION['form-first-step']['departure-coordinates']['lon'] = $arrayDepartureCoordinates[1];
             $this->redirect('index.php?controller=propose-commute&method=choose-vehicle');
@@ -122,6 +118,7 @@ class ProposeCommute extends Controller {
     }
     
     public function chooseVehicle() {
+        $this->checkStep1();
         $getVehicles = new \App\Model\Vehicle();
         $vehicles = $getVehicles->getUserVehicles();
         $this->render('user/driver/propose-commute/choose-vehicle', compact('vehicles'));
@@ -163,31 +160,19 @@ class ProposeCommute extends Controller {
     }
 
     public function chooseTimes() {
-        var_dump($_SESSION['form-first-step']['commute-type']);
-        var_dump($_SESSION['form-first-step']['departure-address']);
-        var_dump($_SESSION['form-first-step']['arrival-address']);
-        var_dump($_SESSION['form-first-step']['arrival-coordinates']);
-        var_dump($_SESSION['form-first-step']['departure-coordinates']);
-        // $tableDays = $this->createTableDays();
-        var_dump($this->tableDays);
-        $tableDays = $this->tableDays;
-        var_dump($tableDays);
+        $this->checkStep1();
+        $this->checkStep2();
+        if ($_SESSION['form-first-step']['commute-type'] === '1') {
+            $tableDays = $this->tableDaysAller;
+        }
+        else if ($_SESSION['form-first-step']['commute-type'] === '2') {
+            $tableDays = $this->tableDaysRetour;
+        }
+        
         $this->render('user/driver/propose-commute/choose-times', compact('tableDays'));
     }
 
     public function saveStep3Data() {
-        // var_dump($_POST['dates']);
-        // exit;
-        // $this->saveStep1Data(); /!\ redirect dans la méthode qui fume tout
-        // $_SESSION['form-first-step'] = '';
-        var_dump($_SESSION['form-first-step']['commute-type']);
-        var_dump($_SESSION['form-first-step']['departure-address']);
-        var_dump($_SESSION['form-first-step']['arrival-address']);
-        var_dump($_SESSION['form-first-step']['arrival-coordinates']);
-        var_dump($_SESSION['form-first-step']['departure-coordinates']);
-        var_dump($_SESSION['form-second-step']['passengers-number']);
-        var_dump($_SESSION['form-second-step']['vehicle']);
-        // exit;
         foreach ($_POST['dates'] as $day) {
             if (empty($_POST['time-'.$day])) {
                 $this->redirect('index.php?controller=propose-commute&method=choose-times');
@@ -200,6 +185,8 @@ class ProposeCommute extends Controller {
     }
 
     public function summary() {
+        $this->checkStep1();
+        $this->checkStep2();
         $data = [
             'commute-type' => $_SESSION['form-first-step']['commute-type'],
             'departure-address' => $_SESSION['form-first-step']['departure-address'],
@@ -212,6 +199,8 @@ class ProposeCommute extends Controller {
                 'lat' => $_SESSION['form-first-step']['departure-coordinates']['lat'],
                 'lon' => $_SESSION['form-first-step']['departure-coordinates']['lon'],
             ],
+            'passengers-number' => $_SESSION['form-second-step']['passengers-number'],
+            'vehicle' => $_SESSION['form-second-step']['vehicle'],
         ];
         foreach ($_SESSION['form-third-step'] as $date=>$time) {
             $dayAndDate = explode("_",$date);
@@ -220,13 +209,39 @@ class ProposeCommute extends Controller {
                 'time' => $time
             ];
         }
-        var_dump($data);
+        var_dump($_SESSION['form-third-step']);
         exit;
-        // sleep(15);
         $this->render('user/driver/propose-commute/summary', compact('data'));
     }
 
-    public function sendCommuteData() {
+    public function checkCommutesData() {
+        $this->checkStep1();
+        $this->checkStep2();
+        if ($_SESSION[['form-first-step']['commute-type'] === 'aller']) {
+            $type = 1;
+        }
+        else if ($_SESSION[['form-first-step']['commute-type'] === 'retour']) {
+            $type = 2;
+        }
+        else {
+            $this->redirect('index.php?controller=propose-commute&method=choose-address');
+        }
+        $getModelProposedCommutes = new \App\Model\ProposeCommute();
+        $proposedCommutes = $getModelProposedCommutes->getAllUserProposedCommutes($type);
+        foreach ($proposedCommutes as $proposedCommute) {
+            $dateFromObject = $proposedCommute->getDepartureTime();
+            $date = $dateFromObject->format('Y-m-d');
+            foreach ($_SESSION['form-third-step'] as $key => $value) {
+                $dateWithoutDay = implode('_',$key);
+                if ($date == $dateWithoutDay[1]) {
+                    $this->redirect('index.php?controller=propose-commute&method=choose-address');
+                }
+            }
+        }
+        $this->redirect('index.php?controller=propose-commute&method=send-commutes-data');
+    }
+
+    public function sendCommutesData() {
         $postCommutes = new \App\Model\ProposeCommute();
         $postCommutes->insertCommutesData();
     }

@@ -20,7 +20,7 @@
         <label for="identical-times" class="choose-times__identical-times-label">Horaires identiques :</label>
         <input type="time" id="identical-times" class="choose-times__identical-times-input">
 
-        <form id="choose-times__form" action="/index.php?controller=propose-commute&method=summary" method="POST" class="choose-times__form">
+        <form id="choose-times__form" action="/index.php?controller=propose-commute&method=save-step3-data" method="POST" class="choose-times__form">
 
             <fieldset class="choose-times__days-fieldset">
                 <legend class="choose-times__days-legend">Horaires</legend>

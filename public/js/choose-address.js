@@ -128,4 +128,10 @@ function displayAddresses() {
   }
 }
 
+if (document.querySelector('.choose-address__disabled-type-button')) {
+  document.querySelector('.choose-address__disabled-type-button').addEventListener('click', () => {
+    document.querySelector('.choose-address__disabled-type-span').classList.toggle('visible')
+  })
+}
+
 fetchAddresses();

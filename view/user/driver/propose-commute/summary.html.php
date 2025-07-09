@@ -23,6 +23,12 @@
             <p class="addresses__item"><span class="addresses__item-title">Arrivée :</span> <?= escapeForHtml($data['arrival-address']) ?></p>
         </section>
 
+        <section class="summary__vehicle">
+            <h2 class="vehicle__title">Véhicule</h2>
+            <span class="vehicle__item"><span class="vehicle__item-title">Nombre de passagers :</span> <?= escapeForHtml($data['passengers-number']) ?></span>
+            <span class="vehicle__item"><span class="vehicle__item-title">Véhicule :</span> <?= escapeForHtml($data['vehicle']) ?></span>
+        </section>
+
         <section class="summary__times">
             <h2 class="times__title">Horaires</h2>
             <ul class="times__days">
@@ -32,7 +38,7 @@
             </ul>
         </section>
 
-        <a href="index.php?controller=propose-commute&method=send-commutes-data" class="u-action u-action-primary">Publier</a>
+        <a href="index.php?controller=propose-commute&method=check-commutes-data" class="u-action u-action-primary">Publier</a>
 
     </main>
     <script src="/js/choose-times.js"></script>

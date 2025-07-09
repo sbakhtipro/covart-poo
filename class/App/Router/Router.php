@@ -117,6 +117,12 @@ abstract class Router {
             return $page;
         }
 
+        if ($controller === 'propose-commute' && $method === 'check-commutes-data') {
+            $page = new \App\Controller\ProposeCommute();
+            $page->checkCommutesData();
+            return $page;
+        }
+
         if ($controller === 'propose-commute' && $method === 'send-commutes-data') {
             $page = new \App\Controller\ProposeCommute();
             $page->sendCommutesData();
