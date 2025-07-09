@@ -166,6 +166,7 @@ class QueryBuilder {
     public function query(): array {
         $this->sql = $this->select . $this->insertInto . $this->delete . $this->update . $this->from . $this->joinOn . $this->where;
         $stmt = Database::getDb()->prepare($this->sql);
+        // var_dump($this->sql);
         $stmt->execute($this->bindings);
         $data = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         $this->reset();

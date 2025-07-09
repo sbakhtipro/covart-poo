@@ -19,7 +19,7 @@ async function fetchAddresses() {
   }
 }
 
-function getResults() {
+function autofill() {
   const input = document.getElementById("address-input");
   const hiddenInput = document.getElementById("coordonnees-input");
   const results = document.getElementById("results");
@@ -92,8 +92,9 @@ function createInputs(isC, isntC, hasI, hasS, adressInput, adressList) {
       hasSelect.innerHTML =
         `<label class="choose-address__label">${hasS.fr} :</label>` +
         adressList;
-      getResults();
+      autofill();
       setSelectCoordinates();
+      // document.querySelector('.choose-address_vehicle').style.display = 'block'
     }
   });
 }

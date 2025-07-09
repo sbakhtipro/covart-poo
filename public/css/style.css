@@ -67,7 +67,9 @@ main {
 }
 
 h1,h2,h3 { /* style titres */
-    color: var(--title-color)
+    color: var(--title-color);
+    display:block;
+    width: 100%;
 }
 
 h1,h2 {
@@ -134,10 +136,13 @@ img:not(.u-icon) { /* ajuste toute les images sauf .u-icon pour qu'elles remplis
     font-family: var(--font-family);
     border-radius: 50px;
     padding: 10px 30px;
-    position: fixed;
+    /* position: fixed;
     top: 85vh;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%); */
+    margin: auto;
+    max-width: fit-content;
+    margin-top: 5rem;
     cursor: pointer;
 }
 
@@ -830,6 +835,10 @@ img:not(.u-icon) { /* ajuste toute les images sauf .u-icon pour qu'elles remplis
     display: none;
 }
 
+.choose-address_vehicle {
+    display: none;
+}
+
 .choose-address__input {
     width: 100%;
     max-width: 100%;
@@ -891,12 +900,31 @@ img:not(.u-icon) { /* ajuste toute les images sauf .u-icon pour qu'elles remplis
     flex-direction: column;
 }
 
+.choose-times__day-already-proposed {
+    font-size: 1.06rem;
+    font-weight: 600;
+    text-transform: capitalize;
+    color: rgb(89, 89, 89);
+    display: block;
+}
+
+.choose-times__day-already-proposed+span {
+    color: rgb(89, 89, 89);
+    display: block;
+    margin-bottom: 1rem;
+}
+
 .choose-times__days-legend {
     text-transform: capitalize;
     font-size: 1.25rem;
     color: var(--title-color);
     font-weight: 600;
     margin-bottom: 20px;
+}
+
+.choose-times__form {
+    display: flex;
+    flex-direction: column;
 }
 
 .choose-times__day-container {
@@ -911,7 +939,7 @@ img:not(.u-icon) { /* ajuste toute les images sauf .u-icon pour qu'elles remplis
     margin-left: 5px;
     font-family: 'Poppins';
     font-size: 1.04rem;
-    margin-bottom: 15px;
+    margin-bottom: 1rem;
     width: fit-content;
 }
 
@@ -945,6 +973,42 @@ img:not(.u-icon) { /* ajuste toute les images sauf .u-icon pour qu'elles remplis
     color: var(--color-primary);
     display: none;
 }
+
+/* ------------- Proposer un trajet - page summary - conducteur ------------- */
+
+.addresses__item {
+    margin-bottom: 10px;
+}
+
+.addresses__item-title {
+    font-weight: 600;
+}
+
+.times__days {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+}
+
+.times__day {
+    border: 2px solid var(--color-primary);
+    border-radius: 10px;
+    padding: var(--spacing-sm);
+    /* background: var(--color-primary); */
+    font-size: 1.15rem;
+    width: calc(100% / 3 - var(--spacing-sm));
+}
+
+.times__day-span {
+    display: block;
+    text-transform: capitalize;
+    font-weight: 600;
+    color: var(--color-primary);
+    /* color: white; */
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+}
+
 
 /* ------------- API map ------------- */
 

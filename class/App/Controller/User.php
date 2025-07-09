@@ -36,6 +36,10 @@ class User extends Controller {
         }
     }
 
+    public function firstLogin() {
+        $this->render('user/first-login');
+    }
+
     public function logout() {
         $_SESSION['role'] = '';
         $_SESSION['id'] = '';

@@ -130,8 +130,8 @@ class Employees {
         return escapeForHtml($this->registrationNumber);
     }
 
-    public function setHireDate(\DateTime $hireDate): void {
-        $this->hireDate = $hireDate;
+    public function setHireDate(string $hireDate): void {
+        $this->hireDate = new \DateTime($hireDate);
     }
     public function getHireDate():\DateTime {
         return $this->hireDate;

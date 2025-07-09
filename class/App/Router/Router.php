@@ -62,6 +62,12 @@ abstract class Router {
             return $page;
         }
 
+        if ($controller === 'propose-commute' && $method === 'start-propose-commute') {
+            $page = new \App\Controller\ProposeCommute();
+            $page->startProposeCommute();
+            return $page;
+        }
+
         if ($controller === 'propose-commute' && $method === 'choose-address') {
             $page = new \App\Controller\ProposeCommute();
             $page->chooseAddress();
@@ -80,15 +86,46 @@ abstract class Router {
             return $page;
         }
 
-        if ($controller === 'propose-commute' && $method === 'choose-times') {
+        if ($controller === 'propose-commute' && $method === 'choose-vehicle') {
             $page = new \App\Controller\ProposeCommute();
-            $page->chooseTimes();
+            $page->chooseVehicle();
             return $page;
         }
 
         if ($controller === 'propose-commute' && $method === 'save-step2-data') {
             $page = new \App\Controller\ProposeCommute();
             $page->saveStep2Data();
+            return $page;
+        }
+
+
+        if ($controller === 'propose-commute' && $method === 'choose-times') {
+            $page = new \App\Controller\ProposeCommute();
+            $page->chooseTimes();
+            return $page;
+        }
+
+        if ($controller === 'propose-commute' && $method === 'save-step3-data') {
+            $page = new \App\Controller\ProposeCommute();
+            $page->saveStep3Data();
+            return $page;
+        }
+
+        if ($controller === 'propose-commute' && $method === 'summary') {
+            $page = new \App\Controller\ProposeCommute();
+            $page->summary();
+            return $page;
+        }
+
+        if ($controller === 'propose-commute' && $method === 'send-commutes-data') {
+            $page = new \App\Controller\ProposeCommute();
+            $page->sendCommutesData();
+            return $page;
+        }
+
+        if ($controller === 'user' && $method === 'first-login') {
+            $page = new \App\Controller\User();
+            $page->firstLogin();
             return $page;
         }
 

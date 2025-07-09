@@ -18,15 +18,15 @@ class CommuteRequest {
         return $this->id;
     }
 
-    public function setRequestDate($requestDate): void {
-        $this->requestDate = $requestDate;
+    public function setRequestDate(string $requestDate): void {
+        $this->requestDate = new \DateTime($requestDate);
     }
     public function getRequestDate($requestDate) {
         return $this->requestDate;
     }
 
-    public function setAgreementDate($agreementDate): void {
-        $this->agreementDate = $agreementDate;
+    public function setAgreementDate(string $agreementDate): void {
+        $this->agreementDate = new \DateTime($agreementDate);
     }
     public function getAgreementDate($agreementDate) {
         return $this->agreementDate;

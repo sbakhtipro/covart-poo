@@ -63,7 +63,7 @@
         <main class="main">
             <h1>Espace passager</h1>
             <div class="main__links">
-                <a href="index.php?controller=passenger-index&method=home&role=driver" class="main__switch u-driver-theme">Je suis conducteur</a>
+                <a href="index.php?controller=passenger-home&method=display-home&role=driver" class="main__switch u-driver-theme">Je suis conducteur</a>
                 <a href="index.php?page=search-commute" class="main__search">Chercher un trajet</a>
                 <a href="index.php?page=commute-requests" class="main__see-commute-requests">Voir mes demandes en cours -></a>
             </div>

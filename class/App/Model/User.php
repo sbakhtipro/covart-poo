@@ -9,7 +9,7 @@ class User extends Model {
     public function getUserByCredentials($userEmail) {
         $data = $this->queryBuilder
             ->table('utilisateurs')
-            ->select(['utilisateurs.utilisateur_mdp', 'utilisateurs.utilisateur_permis_verifie', 'utilisateurs.role_id', 'salaries.salarie_id', 'roles.role_nom'])
+            ->select(['utilisateurs.utilisateur_mdp', 'utilisateurs.utilisateur_mdp_perm', 'utilisateurs.utilisateur_permis_verifie', 'utilisateurs.role_id', 'salaries.salarie_id', 'roles.role_nom'])
             ->from()
             ->joinOn('salaries', 'salaries', 'salarie_id', 'utilisateurs', 'salarie_id')
             ->joinOn('roles', 'roles', 'role_id', 'utilisateurs', 'role_id')

@@ -5,10 +5,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Accueil - Covart</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+    <!-- <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" /> -->
     <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"> -->
     <!-- <script src="/js/choose-times.js"></script> -->
 </head>
 
@@ -20,12 +20,17 @@
         <label for="identical-times" class="choose-times__identical-times-label">Horaires identiques :</label>
         <input type="time" id="identical-times" class="choose-times__identical-times-input">
 
-        <form id="choose-times__form" action="/index.php?controller=propose-commute&method=save-step2-data" method="POST" class="choose-address__form">
+        <form id="choose-times__form" action="/index.php?controller=propose-commute&method=summary" method="POST" class="choose-times__form">
 
             <fieldset class="choose-times__days-fieldset">
                 <legend class="choose-times__days-legend">Horaires</legend>
 
                 <?php foreach ($tableDays as $day) { ?>
+                    <?php if (isset($day['already-proposed-commute'])) { ?>
+                        <span class="choose-times__day-already-proposed"><?= escapeForHtml($day['day']) ?></span>
+                        <span><?= escapeForHtml($day['already-proposed-commute']) ?></span>
+                    <?php }
+                    else { ?>
                     <div class="choose-times__day-container">
                         <label class="choose-times__day-label">
                             <div class="choose-times__checkbox-container">
@@ -33,14 +38,14 @@
                                     <path fill-rule="evenodd" stroke-width="1.6" stroke="var(--color-primary)" clip-rule="evenodd" d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12ZM16.0303 8.96967C16.3232 9.26256 16.3232 9.73744 16.0303 10.0303L11.0303 15.0303C10.7374 15.3232 10.2626 15.3232 9.96967 15.0303L7.96967 13.0303C7.67678 12.7374 7.67678 12.2626 7.96967 11.9697C8.26256 11.6768 8.73744 11.6768 9.03033 11.9697L10.5 13.4393L12.7348 11.2045L14.9697 8.96967C15.2626 8.67678 15.7374 8.67678 16.0303 8.96967Z" fill="var(--color-primary)" />
                                 </svg>
                             </div>
-                            <input type="checkbox" value="<?= escapeForHtml($day['date']) ?>" name="dates[]" class="choose-times__day-input">
+                            <input type="checkbox" value="<?= escapeForHtml($day['day']) . "_" . escapeForHtml($day['date']) ?>" name="dates[]" class="choose-times__day-input">
                             <?= escapeForHtml($day['day']) ?>
                         </label>
                         <label>Départ :
-                            <input type="time" class="choose-times__time-input" name="time-<?= escapeForHtml($day['date']) ?>">
+                            <input type="time" class="choose-times__time-input" name="time-<?= escapeForHtml($day['day']) . "_" . escapeForHtml($day['date']) ?>">
                         </label>
-
                     </div>
+                    <?php } ?>
                 <?php } ?>
 
             </fieldset>
@@ -49,6 +54,7 @@
         </form>
     </main>
     <script src="/js/choose-times.js"></script>
+    <script src="/js/main.js"></script>
 </body>
 
 </html>

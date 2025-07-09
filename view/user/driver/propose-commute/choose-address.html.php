@@ -14,7 +14,7 @@
 
     <main class="choose-address u-container-sm" id="main">
         <h1 class="choose-address__title">Choix de l'adresse</h1>
-        <form action="index.php?controller=propose-commute&method=save-step1-data" method="POST" class="choose-address__form">
+        <form action="index.php?controller=propose-commute&method=save-step1-data" method="POST" class="choose-address__form" autocomplete="off">
             <fieldset class="choose-address__type-fieldset">
                 <legend class="choose-address__type-legend">Choisir le type de trajet :</legend>
                 <?php foreach($types as $type) { ?>
@@ -31,5 +31,6 @@
         </form>
         <!-- <script src="/js/autofill.js" defer></script> -->
     </main>
+    <script src="/js/main.js"></script>
 </body>
 </html>

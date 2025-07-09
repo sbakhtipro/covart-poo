@@ -6,7 +6,7 @@
     <title>Profil - NOM PRENOM</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
-<body class="u-<?= hsc($_SESSION['role']) ?>-theme">
+<body class="u-<?= escapeForHtml($_SESSION['role']) ?>-theme">
 
     <main class="profile u-container-sm" id="main">
         <div class="profile__links">

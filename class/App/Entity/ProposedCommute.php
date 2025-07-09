@@ -76,8 +76,8 @@ class ProposedCommute {
     }
 
     // FORMATTER GETTER /!\
-    public function setDepartureTime(\DateTime $departureTime): void {
-        $this->departureTime = $departureTime;
+    public function setDepartureTime(string $departureTime): void {
+        $this->departureTime = new \DateTime($departureTime);
     }
     public function getDepartureTime(): \DateTime {
         return $this->departureTime;
@@ -91,8 +91,8 @@ class ProposedCommute {
     }
 
     // FORMATTER GETTER /!\
-    public function setSuppressionTime(?\DateTime $suppressionTime = null): void {
-        $this->suppressionTime = $suppressionTime;
+    public function setSuppressionTime(?string $suppressionTime = null): void {
+        $this->suppressionTime = new \DateTime($suppressionTime);
     }
     public function getSuppressionTime(): ?\DateTime {
         return $this->suppressionTime;
