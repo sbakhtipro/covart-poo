@@ -13,6 +13,8 @@
 
 <body class="u-driver-theme">
 
+    <script src="/js/forced-reload.js"></script>
+
     <main class="choose-vehicle u-container-sm" id="main">
         <h1 class="choose-vehicle__title">Choix du véhicule</h1>
         <form action="index.php?controller=propose-commute&method=save-step2-data" method="POST" class="choose-vehicle__form">
@@ -28,6 +30,7 @@
                     <option value="<?= $vehicle->getId() ?>"><?= $vehicle->getRegistrationPlate() ?></option>
                 <?php } ?>
             </select>
+            <input type="hidden" value="<?= escapeForHtml($token) ?>" name="token-csrf">
             <input type="submit" value="Suivant" id="submit" class="u-action u-action-primary"/>
         </form>
         <!-- <script src="/js/autofill.js" defer></script> -->

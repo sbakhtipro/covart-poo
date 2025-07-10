@@ -76,7 +76,7 @@ function createInputs(isC, isntC, hasI, hasS, adressInput, adressList) {
   let isntChecked = document.getElementById(isntC);
   let hasInput = document.querySelector(".choose-address__" + hasI.en);
   let hasSelect = document.querySelector(".choose-address__" + hasS.en);
-  isChecked.addEventListener("click", () => {
+  isChecked.addEventListener("change", () => {
     if (isChecked.checked) {
       isChecked.parentElement.classList.add(
         "choose-address__type-radio--checked"

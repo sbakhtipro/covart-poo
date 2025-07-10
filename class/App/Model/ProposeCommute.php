@@ -29,17 +29,17 @@ class ProposeCommute extends Model {
         $request = $this->queryBuilder
             ->table('trajets_proposes')
             ->insertInto([
-                'trajet_lieu_arrivee' => $data['arrival-address'],
-                'trajet_lieu_arrivee_lat' => $data['arrival-coordinates']['lat'],
-                'trajet_lieu_arrivee_lon' => $data['arrival-coordinates']['lon'],
-                'trajet_lieu_depart' => $data['departure-address'],
-                'trajet_lieu_depart_lat' => $data['departure-coordinates']['lat'],
-                'trajet_lieu_depart_lon' => $data['departure-coordinates']['lon'],
+                'trajet_lieu_arrivee' => $data['form-step-1']['arrival-address'],
+                'trajet_lieu_arrivee_lat' => $data['form-step-1']['arrival-coordinates']['lat'],
+                'trajet_lieu_arrivee_lon' => $data['form-step-1']['arrival-coordinates']['lon'],
+                'trajet_lieu_depart' => $data['form-step-1']['departure-address'],
+                'trajet_lieu_depart_lat' => $data['form-step-1']['departure-coordinates']['lat'],
+                'trajet_lieu_depart_lon' => $data['form-step-1']['departure-coordinates']['lon'],
                 'trajet_heure_depart' => $dateTime,
-                'trajet_nb_places' => $data['passengers-number'],
-                'type_trajet_id' => $data['commute-type'],
+                'trajet_nb_places' => $data['form-step-2']['passengers-number'],
+                'type_trajet_id' => $data['form-step-1']['commute-type']['id'],
                 'salarie_id' => $_SESSION['id'],
-                'vehicule_id' => $data['vehicle']
+                'vehicule_id' => $data['form-step-2']['vehicle']
                 ])
             // ->where('salarie_id', '=', $_SESSION['id'])
             ->query();

@@ -14,25 +14,27 @@
 
 <body class="u-driver-theme">
 
+    <script src="/js/forced-reload.js"></script>
+
     <main class="summary u-container-sm" id="main">
         <h1 class="summary__title">Résumé</h1>
 
         <section class="summary__addresses">
             <h2 class="addresses__title">Itinéraire</h2>
-            <p class="addresses__item"><span class="addresses__item-title">Départ :</span> <?= escapeForHtml($data['departure-address']) ?></p>
-            <p class="addresses__item"><span class="addresses__item-title">Arrivée :</span> <?= escapeForHtml($data['arrival-address']) ?></p>
+            <p class="addresses__item"><span class="addresses__item-title">Départ :</span> <?= escapeForHtml($data['form-step-1']['departure-address']) ?></p>
+            <p class="addresses__item"><span class="addresses__item-title">Arrivée :</span> <?= escapeForHtml($data['form-step-1']['arrival-address']) ?></p>
         </section>
 
         <section class="summary__vehicle">
             <h2 class="vehicle__title">Véhicule</h2>
-            <span class="vehicle__item"><span class="vehicle__item-title">Nombre de passagers :</span> <?= escapeForHtml($data['passengers-number']) ?></span>
-            <span class="vehicle__item"><span class="vehicle__item-title">Véhicule :</span> <?= escapeForHtml($data['vehicle']) ?></span>
+            <span class="vehicle__item"><span class="vehicle__item-title">Nombre de passagers :</span> <?= escapeForHtml($data['form-step-2']['passengers-number']) ?></span>
+            <span class="vehicle__item"><span class="vehicle__item-title">Véhicule :</span> <?= escapeForHtml($data['form-step-2']['vehicle']) ?></span>
         </section>
 
         <section class="summary__times">
             <h2 class="times__title">Horaires</h2>
             <ul class="times__days">
-                <?php foreach($data['commute-dates'] as $date) { ?>
+                <?php foreach($data['form-step-3']['commute-dates'] as $date) { ?>
                     <li class="times__day"><span class="times__day-span"><?= escapeForHtml($date['day']) ?> - <span><?= escapeForHtml($date['date']) ?></span></span>Départ à <?= escapeForHtml($date['time']) ?></li>
                 <?php } ?>
             </ul>

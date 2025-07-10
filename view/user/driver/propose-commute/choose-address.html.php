@@ -10,7 +10,9 @@
     <script src="/js/choose-address.js" defer></script>
 </head>
 
-<body class="u-driver-theme">   
+<body class="u-driver-theme">
+
+    <script src="/js/forced-reload.js"></script>
 
     <main class="choose-address u-container-sm" id="main">
         <h1 class="choose-address__title">Choix de l'adresse</h1>
@@ -42,6 +44,7 @@
             <div class="choose-address__arrival"></div>
             <input type="hidden" id="coordonnees-list" name="coordonnees-list" />
             <input type="hidden" id="coordonnees-input" name="coordonnees-input" />
+            <input type="hidden" value="<?= escapeForHtml($token) ?>" name="token-csrf">
             <input type="submit" value="Suivant" id="submit" class="u-action u-action-primary" style="display: none;"/>
         </form>
         <!-- <script src="/js/autofill.js" defer></script> -->

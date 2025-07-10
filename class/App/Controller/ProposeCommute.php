@@ -1,6 +1,6 @@
 <?php
 
-// IMPORTANT : FILTER INPUT, FAILLE CSRF, VERIFIER ROLE AVANT AJOUT DANS BDD, MESSAGES ERREUR, FORM VALIDATOR
+// IMPORTANT : FILTER INPUT, MESSAGES ERREUR, GESTION ERREURS, FORM VALIDATOR, REFACTO, DRY SAVE STEP 1
 
 namespace App\Controller;
 
@@ -16,27 +16,39 @@ class ProposeCommute extends Controller {
         $this->tableDaysAller = $_SESSION['table-days-aller'] ?? [];
         $this->tableDaysRetour = $_SESSION['table-days-retour'] ?? [];
         $this->data = [
-            'commute-type' => $_SESSION['form-first-step']['commute-type'] ?? '',
-            'departure-address' => $_SESSION['form-first-step']['departure-address'] ?? '',
-            'arrival-address' => $_SESSION['form-first-step']['arrival-address'] ?? '',
-            'arrival-coordinates' => [
-                'lat' => $_SESSION['form-first-step']['arrival-coordinates']['lat'] ?? '',
-                'lon' => $_SESSION['form-first-step']['arrival-coordinates']['lon'] ?? '',
+            'form-step-1' => [
+                'commute-type' => [
+                    'id' => $_SESSION['form-first-step']['commute-type']['id'] ?? '',
+                    'name' => $_SESSION['form-first-step']['commute-type']['name'] ?? ''
+                ] ?? [],
+                'departure-address' => $_SESSION['form-first-step']['departure-address'] ?? '',
+                'arrival-address' => $_SESSION['form-first-step']['arrival-address'] ?? '',
+                'arrival-coordinates' => [
+                    'lat' => $_SESSION['form-first-step']['arrival-coordinates']['lat'] ?? '',
+                    'lon' => $_SESSION['form-first-step']['arrival-coordinates']['lon'] ?? '',
+                ] ?? [],
+                'departure-coordinates' => [
+                    'lat' => $_SESSION['form-first-step']['departure-coordinates']['lat'] ?? '',
+                    'lon' => $_SESSION['form-first-step']['departure-coordinates']['lon'] ?? '',
+                ] ?? [],
+                'token-csrf' => $_SESSION['form-first-step']['token-csrf'] ?? ''
             ] ?? [],
-            'departure-coordinates' => [
-                'lat' => $_SESSION['form-first-step']['departure-coordinates']['lat'] ?? '',
-                'lon' => $_SESSION['form-first-step']['departure-coordinates']['lon'] ?? '',
+            'form-step-2' => [
+                'passengers-number' => $_SESSION['form-second-step']['passengers-number'] ?? '',
+                'vehicle' => $_SESSION['form-second-step']['vehicle'] ?? '',
+                'token-csrf' => $_SESSION['form-second-step']['token-csrf'] ?? ''
             ] ?? [],
-            'passengers-number' => $_SESSION['form-second-step']['passengers-number'] ?? '',
-            'vehicle' => $_SESSION['form-second-step']['vehicle'] ?? '',
-            'commute-dates' => $thirdStep ?? []        
+            'form-step-3' => [
+                'token-csrf' => $_SESSION['form-third-step']['token-csrf'] ?? ''
+            ]                    
         ];
         if (isset($_SESSION['form-third-step'])) {
-            foreach ($_SESSION['form-third-step'] as $date=>$time) {
+            // $this->data['form-step-3']['token-csrf'] = $_SESSION['form-third-step']['token-csrf'];
+            foreach ($_SESSION['form-third-step']['commute-dates'] as $date=>$time) {
                 $dayAndDate = explode("_",$date);
                 $dateObject = new DateTime($dayAndDate[1]);
                 $date = $dateObject->format('d.m');
-                $this->data['commute-dates'][$dayAndDate[1]] = [
+                $this->data['form-step-3']['commute-dates'][$dayAndDate[1]] = [
                     'day' => $dayAndDate[0],
                     'date' => $date,
                     'time' => $time
@@ -46,14 +58,20 @@ class ProposeCommute extends Controller {
     }
 
     private function checkStep1(): void {
-        if (empty($_SESSION['form-first-step']['arrival-address']) || empty($_SESSION['form-first-step']['departure-address']) || empty($_SESSION['form-first-step']['arrival-coordinates']['lat']) || empty($_SESSION['form-first-step']['arrival-coordinates']['lon']) || empty($_SESSION['form-first-step']['departure-coordinates']['lat']) || empty($_SESSION['form-first-step']['commute-type'])) {
+        if (empty($_SESSION['form-first-step']['arrival-address']) || empty($_SESSION['form-first-step']['departure-address']) || empty($_SESSION['form-first-step']['arrival-coordinates']['lat']) || empty($_SESSION['form-first-step']['arrival-coordinates']['lon']) || empty($_SESSION['form-first-step']['departure-coordinates']['lat']) || empty($_SESSION['form-first-step']['commute-type']) || empty($_SESSION['form-first-step']['token-csrf'])) {
             $this->redirect('index.php?controller=propose-commute&method=choose-address');
         }
     }
 
     private function checkStep2(): void {
-        if (empty($_SESSION['form-second-step']['passengers-number']) || empty($_SESSION['form-second-step']['vehicle'])) {
+        if (empty($_SESSION['form-second-step']['passengers-number']) || empty($_SESSION['form-second-step']['vehicle']) || empty($_SESSION['form-second-step']['token-csrf'])) {
             $this->redirect('index.php?controller=propose-commute&method=choose-vehicle');
+        }
+    }
+
+    private function checkStep3(): void {
+        if (empty($_SESSION['form-third-step']['commute-dates']) || empty($_SESSION['form-third-step']['token-csrf'])) {
+            $this->redirect('index.php?controller=propose-commute&method=choose-timesS');
         }
     }
 
@@ -108,8 +126,14 @@ class ProposeCommute extends Controller {
     }
 
     public function chooseAddress(): void {
+        var_dump($_SESSION);
+        exit;
         $this->startProposeCommute();
         $this->clearStep1();
+        $data = [];
+        if (isset($_SESSION['form-first-step'])) {
+            $data = $this->data['form-step-1'];
+        }
         $getTypes = new \App\Model\CommuteTypes();
         $types = $getTypes->getCommuteTypes();
         $aller = 0;
@@ -134,15 +158,18 @@ class ProposeCommute extends Controller {
         if ($retour<7) {
             $availableTypes['retour'] = '1';
         }
-        $this->render('user/driver/propose-commute/choose-address', compact('types','availableTypes'));
+        $token = $_SESSION['token_csrf'];
+        $this->render('user/driver/propose-commute/choose-address', compact('types','availableTypes','data','token'));
     }
 
     public function saveStep1Data(): void {
-        if (empty($_POST['commute-type']) || empty($_POST['input-address']) || empty($_POST['list-address']) || empty($_POST['coordonnees-list']) || empty($_POST['coordonnees-input'])) {
+        if (empty($_POST['commute-type']) || empty($_POST['input-address']) || empty($_POST['list-address']) || empty($_POST['coordonnees-list']) || empty($_POST['coordonnees-input']) || empty($_POST['token-csrf'])) {
             $this->redirect('index.php?controller=propose-commute&method=choose-address');
         }
-        $_SESSION['form-first-step']['commute-type'] = $_POST['commute-type'];
-        if ($_SESSION['form-first-step']['commute-type'] == 1) {
+        $_SESSION['form-first-step']['token-csrf'] = $_POST['token-csrf'];
+        $_SESSION['form-first-step']['commute-type']['id'] = $_POST['commute-type'];
+        if ($_SESSION['form-first-step']['commute-type']['id'] == 1) {
+            $_SESSION['form-first-step']['commute-type']['name'] = 'aller';
             $_SESSION['form-first-step']['departure-address'] = $_POST['input-address'];
             $_SESSION['form-first-step']['arrival-address'] = $_POST['list-address'];
             $arrayDepartureCoordinates = explode(', ', $_POST['coordonnees-input']);
@@ -153,7 +180,8 @@ class ProposeCommute extends Controller {
             $_SESSION['form-first-step']['departure-coordinates']['lon'] = $arrayDepartureCoordinates[1];
             $this->redirect('index.php?controller=propose-commute&method=choose-vehicle');
         }
-        else if ($_SESSION['form-first-step']['commute-type'] == 2) {
+        else if ($_SESSION['form-first-step']['commute-type']['id'] == 2) {
+            $_SESSION['form-first-step']['commute-type']['name'] = 'retour';
             $_SESSION['form-first-step']['arrival-address'] = $_POST['input-address'];
             $_SESSION['form-first-step']['departure-address'] = $_POST['list-address'];
             $arrayDepartureCoordinates = explode(',',$_POST['coordonnees-list']);
@@ -174,13 +202,15 @@ class ProposeCommute extends Controller {
         $this->checkStep1();
         $getVehicles = new \App\Model\Vehicle();
         $vehicles = $getVehicles->getUserVehicles();
-        $this->render('user/driver/propose-commute/choose-vehicle', compact('vehicles'));
+        $token = $_SESSION['token_csrf'];
+        $this->render('user/driver/propose-commute/choose-vehicle', compact('vehicles','token'));
     }
 
     public function saveStep2Data(): void {
-        if (empty($_POST['passengers_number']) || empty($_POST['vehicle'])) {
+        if (empty($_POST['passengers_number']) || empty($_POST['vehicle']) || empty($_POST['token-csrf'])) {
             $this->redirect('index.php?controller=propose-commute&method=choose-vehicle');
         }
+        $_SESSION['form-second-step']['token-csrf'] = $_POST['token-csrf'];
         $_SESSION['form-second-step']['passengers-number'] = $_POST['passengers_number'];
         $_SESSION['form-second-step']['vehicle'] = $_POST['vehicle'];
         $this->redirect('index.php?controller=propose-commute&method=choose-times');
@@ -216,26 +246,31 @@ class ProposeCommute extends Controller {
 
     public function chooseTimes(): void {
         $this->clearStep3();
+        // var_dump($_SESSION);
         $this->checkStep1();
         $this->checkStep2();
-        if ($_SESSION['form-first-step']['commute-type'] === '1') {
+        if ($_SESSION['form-first-step']['commute-type']['id'] === '1') {
             $tableDays = $this->tableDaysAller;
         }
-        else if ($_SESSION['form-first-step']['commute-type'] === '2') {
+        else if ($_SESSION['form-first-step']['commute-type']['id'] === '2') {
             $tableDays = $this->tableDaysRetour;
         }
-        
-        $this->render('user/driver/propose-commute/choose-times', compact('tableDays'));
+        $token = $_SESSION['token_csrf'];
+        $this->render('user/driver/propose-commute/choose-times', compact('tableDays','token'));
     }
 
     public function saveStep3Data() {
+        if (empty($_POST['token-csrf'])) {
+            $this->redirect('index.php?controller=propose-commute&method=choose-times');
+        }
+        $_SESSION['form-third-step']['token-csrf'] = $_POST['token-csrf'];
         foreach ($_POST['dates'] as $day) {
             if (empty($_POST['time-'.$day])) {
                 $this->redirect('index.php?controller=propose-commute&method=choose-times');
             }
         }
         foreach ($_POST['dates'] as $day) {
-            $_SESSION['form-third-step'][$day] = $_POST['time-'.$day];
+            $_SESSION['form-third-step']['commute-dates'][$day] = $_POST['time-'.$day];
         }
         $this->redirect('index.php?controller=propose-commute&method=summary');
     }
@@ -243,16 +278,7 @@ class ProposeCommute extends Controller {
     public function summary(): void {
         $this->checkStep1();
         $this->checkStep2();
-        // foreach ($_SESSION['form-third-step'] as $date=>$time) {
-        //     $dayAndDate = explode("_",$date);
-        //     $dateObject = new DateTime($dayAndDate[1]);
-        //     $date = $dateObject->format('d.m');
-        //     $this->data['commute-dates'][$dayAndDate[1]] = [
-        //         'day' => $dayAndDate[0],
-        //         'date' => $date,
-        //         'time' => $time
-        //     ];
-        // }
+        $this->checkStep3();
         $data = $this->data;
         // var_dump($this->data);
         // exit;
@@ -262,16 +288,15 @@ class ProposeCommute extends Controller {
     public function checkCommutesData(): void {
         $this->checkStep1();
         $this->checkStep2();
-        // if ($_SESSION['form-first-step']['commute-type'] === 'aller') {
-        //     $type = 1;
-        // }
-        // else if ($_SESSION['form-first-step']['commute-type'] === 'retour') {
-        //     $type = 2;
-        // }
-        if ($_SESSION['form-first-step']['commute-type'] == 1 || $_SESSION['form-first-step']['commute-type'] == 2) {
-            $type = $_SESSION['form-first-step']['commute-type'];
+        $this->checkStep3();
+        $this->checkTokenCSRF();
+        $this->checkUserRole();
+        if ($_SESSION['form-first-step']['commute-type']['id'] == 1 || $_SESSION['form-first-step']['commute-type']['id'] == 2) {
+            $type = $_SESSION['form-first-step']['commute-type']['id'];
         }
         else {
+            // echo 'test';
+            // exit;
             $this->redirect('index.php?controller=propose-commute&method=choose-address');
         }
         $getModelProposedCommutes = new \App\Model\ProposeCommute();
@@ -279,7 +304,7 @@ class ProposeCommute extends Controller {
         foreach ($proposedCommutes as $proposedCommute) {
             $dateFromObject = $proposedCommute->getDepartureTime();
             $date = $dateFromObject->format('Y-m-d');
-            foreach ($_SESSION['form-third-step'] as $key => $value) {
+            foreach ($_SESSION['form-third-step']['commute-dates'] as $key => $value) {
                 $keyArray = explode('_',$key);
                 if ($date == $keyArray[1]) {
                     $this->redirect('index.php?controller=propose-commute&method=choose-address');
@@ -289,11 +314,22 @@ class ProposeCommute extends Controller {
         $this->redirect('index.php?controller=propose-commute&method=send-commutes-data');
     }
 
+    private function checkTokenCSRF(): void {
+        if ($this->data['form-step-1']['token-csrf'] != $_SESSION['token_csrf'] || $this->data['form-step-2']['token-csrf'] != $_SESSION['token_csrf'] || $this->data['form-step-3']['token-csrf'] != $_SESSION['token_csrf']) {
+            $this->redirect('index.php?controller=user&method=driver-home');
+        }
+    }
+
+    private function checkUserRole(): void {
+        $role = new \App\Auth\UserAuth();
+        $role->isDriver();
+    }
+
     public function sendCommutesData(): void {
-        if (empty($this->data['commute-dates'])) {
+        if (empty($this->data['form-step-3']['commute-dates'])) {
             $this->redirect('index.php?controller=propose-commute&method=choose-times');
         }
-        foreach ($this->data['commute-dates'] as $date => $value) {
+        foreach ($this->data['form-step-3']['commute-dates'] as $date => $value) {
             // var_dump($date . ' ' . $value['time']);
             // exit;
             $postCommutes = new \App\Model\ProposeCommute();

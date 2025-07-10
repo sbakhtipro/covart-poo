@@ -4,6 +4,9 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <title>Accueil - Covart</title>
     <!-- <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" /> -->
@@ -14,14 +17,7 @@
 
 <body class="u-driver-theme">
 
-    <script>
-  // Ajouter un paramètre unique pour éviter le cache
-  if (performance.navigation.type === 1) {
-    const url = new URL(window.location.href);
-    url.searchParams.set('_nocache', Date.now());
-    window.location.replace(url);
-  }
-</script>
+    <script src="/js/forced-reload.js"></script>
 
     <main class="choose-times u-container-sm" id="main">
         <h1 class="choose-times__title">Choix des horaires</h1>
@@ -49,7 +45,7 @@
                                     <path fill-rule="evenodd" stroke-width="1.6" stroke="var(--color-primary)" clip-rule="evenodd" d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12ZM16.0303 8.96967C16.3232 9.26256 16.3232 9.73744 16.0303 10.0303L11.0303 15.0303C10.7374 15.3232 10.2626 15.3232 9.96967 15.0303L7.96967 13.0303C7.67678 12.7374 7.67678 12.2626 7.96967 11.9697C8.26256 11.6768 8.73744 11.6768 9.03033 11.9697L10.5 13.4393L12.7348 11.2045L14.9697 8.96967C15.2626 8.67678 15.7374 8.67678 16.0303 8.96967Z" fill="var(--color-primary)" />
                                 </svg>
                             </div>
-                            <input type="checkbox" value="<?= escapeForHtml($day['day']) . "_" . escapeForHtml($day['date']) ?>" name="dates[]" class="choose-times__day-input">
+                            <input <?= isset($_SESSION['form-third-step']) ? ' checked ' : '' ?> type="checkbox" value="<?= escapeForHtml($day['day']) . "_" . escapeForHtml($day['date']) ?>" name="dates[]" class="choose-times__day-input">
                             <?= escapeForHtml($day['day']); ?><span style="text-transform:lowercase"><?= escapeForHtml(($day['tomorrow']  === 'yes') ? ' (demain)' : '') ?></span>
                         </label>
                         <label>Départ :
@@ -60,7 +56,7 @@
                 <?php } ?>
 
             </fieldset>
-
+            <input type="hidden" value="<?= escapeForHtml($token) ?>" name="token-csrf">
             <input type="submit" value="Suivant" id="choose-times__submit" class="u-action u-action-primary" />
         </form>
     </main>

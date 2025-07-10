@@ -10,6 +10,7 @@ class UserAuth extends Auth {
             $_SESSION['role'] = $userInformations['role_nom'];
             $_SESSION['permis_verifie'] = $userInformations['utilisateur_permis_verifie'];
             $_SESSION['id'] = $userInformations['salarie_id'];
+            $_SESSION['token_csrf'] = bin2hex(random_bytes(32));
             return true;
         }
         return false;
