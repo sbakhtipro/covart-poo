@@ -62,11 +62,11 @@ abstract class Router {
             return $page;
         }
 
-        if ($controller === 'propose-commute' && $method === 'start-propose-commute') {
-            $page = new \App\Controller\ProposeCommute();
-            $page->startProposeCommute();
-            return $page;
-        }
+        // if ($controller === 'propose-commute' && $method === 'start-propose-commute') {
+        //     $page = new \App\Controller\ProposeCommute();
+        //     $page->startProposeCommute();
+        //     return $page;
+        // }
 
         if ($controller === 'propose-commute' && $method === 'choose-address') {
             $page = new \App\Controller\ProposeCommute();

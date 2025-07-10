@@ -25,7 +25,7 @@
             <label for="vehicle">Véhicule :</label>
             <select name="vehicle" id="vehicle">
                 <?php foreach ($vehicles as $vehicle) { ?>
-                    <option value="<?= $vehicle->getRegistrationPlate() ?>"><?= $vehicle->getRegistrationPlate() ?></option>
+                    <option value="<?= $vehicle->getId() ?>"><?= $vehicle->getRegistrationPlate() ?></option>
                 <?php } ?>
             </select>
             <input type="submit" value="Suivant" id="submit" class="u-action u-action-primary"/>

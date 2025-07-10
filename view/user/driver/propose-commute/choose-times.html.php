@@ -14,13 +14,22 @@
 
 <body class="u-driver-theme">
 
+    <script>
+  // Ajouter un paramètre unique pour éviter le cache
+  if (performance.navigation.type === 1) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('_nocache', Date.now());
+    window.location.replace(url);
+  }
+</script>
+
     <main class="choose-times u-container-sm" id="main">
         <h1 class="choose-times__title">Choix des horaires</h1>
 
         <label for="identical-times" class="choose-times__identical-times-label">Horaires identiques :</label>
         <input type="time" id="identical-times" class="choose-times__identical-times-input">
 
-        <form id="choose-times__form" action="/index.php?controller=propose-commute&method=save-step3-data" method="POST" class="choose-times__form">
+        <form id="choose-times__form" autocomplete="off" action="/index.php?controller=propose-commute&method=save-step3-data" method="POST" class="choose-times__form">
 
             <fieldset class="choose-times__days-fieldset">
                 <legend class="choose-times__days-legend">Horaires</legend>

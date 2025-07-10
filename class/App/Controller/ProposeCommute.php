@@ -29,7 +29,20 @@ class ProposeCommute extends Controller {
             ] ?? [],
             'passengers-number' => $_SESSION['form-second-step']['passengers-number'] ?? '',
             'vehicle' => $_SESSION['form-second-step']['vehicle'] ?? '',
+            'commute-dates' => $thirdStep ?? []        
         ];
+        if (isset($_SESSION['form-third-step'])) {
+            foreach ($_SESSION['form-third-step'] as $date=>$time) {
+                $dayAndDate = explode("_",$date);
+                $dateObject = new DateTime($dayAndDate[1]);
+                $date = $dateObject->format('d.m');
+                $this->data['commute-dates'][$dayAndDate[1]] = [
+                    'day' => $dayAndDate[0],
+                    'date' => $date,
+                    'time' => $time
+                ];
+            }
+        }
     }
 
     private function checkStep1(): void {
@@ -62,7 +75,7 @@ class ProposeCommute extends Controller {
         }
     }
 
-    public function startProposeCommute(): void {
+    private function startProposeCommute(): void {
         $getModelProposedCommutes = new \App\Model\ProposeCommute();
         $proposedCommutesAller = $getModelProposedCommutes->getAllUserProposedCommutes(1);
         $proposedCommutesRetour = $getModelProposedCommutes->getAllUserProposedCommutes(2); 
@@ -70,7 +83,6 @@ class ProposeCommute extends Controller {
         $tableDaysRetour = $this->arrayProposedCommutes($proposedCommutesRetour);
         $_SESSION['table-days-aller'] = $tableDaysAller;
         $_SESSION['table-days-retour'] = $tableDaysRetour;
-        $this->redirect('index.php?controller=propose-commute&method=choose-address');
     }
 
     private function arrayProposedCommutes(array $array): array {
@@ -96,6 +108,7 @@ class ProposeCommute extends Controller {
     }
 
     public function chooseAddress(): void {
+        $this->startProposeCommute();
         $this->clearStep1();
         $getTypes = new \App\Model\CommuteTypes();
         $types = $getTypes->getCommuteTypes();
@@ -228,19 +241,18 @@ class ProposeCommute extends Controller {
     }
 
     public function summary(): void {
-        
         $this->checkStep1();
         $this->checkStep2();
-        foreach ($_SESSION['form-third-step'] as $date=>$time) {
-            $dayAndDate = explode("_",$date);
-            $dateObject = new DateTime($dayAndDate[1]);
-            $date = $dateObject->format('d.m');
-            $this->data['commute-dates'][$dayAndDate[1]] = [
-                'day' => $dayAndDate[0],
-                'date' => $date,
-                'time' => $time
-            ];
-        }
+        // foreach ($_SESSION['form-third-step'] as $date=>$time) {
+        //     $dayAndDate = explode("_",$date);
+        //     $dateObject = new DateTime($dayAndDate[1]);
+        //     $date = $dateObject->format('d.m');
+        //     $this->data['commute-dates'][$dayAndDate[1]] = [
+        //         'day' => $dayAndDate[0],
+        //         'date' => $date,
+        //         'time' => $time
+        //     ];
+        // }
         $data = $this->data;
         // var_dump($this->data);
         // exit;
@@ -260,8 +272,6 @@ class ProposeCommute extends Controller {
             $type = $_SESSION['form-first-step']['commute-type'];
         }
         else {
-            echo 'test';
-            exit;
             $this->redirect('index.php?controller=propose-commute&method=choose-address');
         }
         $getModelProposedCommutes = new \App\Model\ProposeCommute();
@@ -271,7 +281,6 @@ class ProposeCommute extends Controller {
             $date = $dateFromObject->format('Y-m-d');
             foreach ($_SESSION['form-third-step'] as $key => $value) {
                 $keyArray = explode('_',$key);
-                // $dateWithoutDay = implode('_',$key);
                 if ($date == $keyArray[1]) {
                     $this->redirect('index.php?controller=propose-commute&method=choose-address');
                 }
@@ -285,8 +294,8 @@ class ProposeCommute extends Controller {
             $this->redirect('index.php?controller=propose-commute&method=choose-times');
         }
         foreach ($this->data['commute-dates'] as $date => $value) {
-            var_dump($date . ' ' . $value['time']);
-            exit;
+            // var_dump($date . ' ' . $value['time']);
+            // exit;
             $postCommutes = new \App\Model\ProposeCommute();
             $postCommutes->insertCommutesData($this->data,$date . ' ' . $value['time']);
         }

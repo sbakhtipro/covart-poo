@@ -27,7 +27,7 @@ class ProposeCommute extends Model {
 
     public function insertCommutesData($data,$dateTime) {
         $request = $this->queryBuilder
-            ->table('proposed-commutes')
+            ->table('trajets_proposes')
             ->insertInto([
                 'trajet_lieu_arrivee' => $data['arrival-address'],
                 'trajet_lieu_arrivee_lat' => $data['arrival-coordinates']['lat'],
@@ -39,9 +39,9 @@ class ProposeCommute extends Model {
                 'trajet_nb_places' => $data['passengers-number'],
                 'type_trajet_id' => $data['commute-type'],
                 'salarie_id' => $_SESSION['id'],
-                'vehicule_id' => ''
+                'vehicule_id' => $data['vehicle']
                 ])
-            ->where('salarie_id', '=', $_SESSION['id'])
+            // ->where('salarie_id', '=', $_SESSION['id'])
             ->query();
     }
 
