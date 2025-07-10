@@ -25,9 +25,23 @@ class ProposeCommute extends Model {
         return $proposedCommutes;
     }
 
-    public function insertCommutesData() {
+    public function insertCommutesData($data,$dateTime) {
         $request = $this->queryBuilder
             ->table('proposed-commutes')
+            ->insertInto([
+                'trajet_lieu_arrivee' => $data['arrival-address'],
+                'trajet_lieu_arrivee_lat' => $data['arrival-coordinates']['lat'],
+                'trajet_lieu_arrivee_lon' => $data['arrival-coordinates']['lon'],
+                'trajet_lieu_depart' => $data['departure-address'],
+                'trajet_lieu_depart_lat' => $data['departure-coordinates']['lat'],
+                'trajet_lieu_depart_lon' => $data['departure-coordinates']['lon'],
+                'trajet_heure_depart' => $dateTime,
+                'trajet_nb_places' => $data['passengers-number'],
+                'type_trajet_id' => $data['commute-type'],
+                'salarie_id' => $_SESSION['id'],
+                'vehicule_id' => ''
+                ])
+            ->where('salarie_id', '=', $_SESSION['id'])
             ->query();
     }
 

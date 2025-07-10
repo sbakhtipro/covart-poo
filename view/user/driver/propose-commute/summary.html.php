@@ -33,7 +33,7 @@
             <h2 class="times__title">Horaires</h2>
             <ul class="times__days">
                 <?php foreach($data['commute-dates'] as $date) { ?>
-                    <li class="times__day"><span class="times__day-span"><?= escapeForHtml($date['day']) ?></span>Départ à <?= escapeForHtml($date['time']) ?></li>
+                    <li class="times__day"><span class="times__day-span"><?= escapeForHtml($date['day']) ?> - <span><?= escapeForHtml($date['date']) ?></span></span>Départ à <?= escapeForHtml($date['time']) ?></li>
                 <?php } ?>
             </ul>
         </section>

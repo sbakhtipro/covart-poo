@@ -27,7 +27,9 @@
 
                 <?php foreach ($tableDays as $day) { ?>
                     <?php if (isset($day['already-proposed-commute'])) { ?>
-                        <span class="choose-times__day-already-proposed"><?= escapeForHtml($day['day']) ?></span>
+                    <span class="choose-times__day-already-proposed"><?= escapeForHtml($day['day']); ?>
+                        <span style="text-transform:lowercase"><?= escapeForHtml(($day['tomorrow']  === 'yes') ? ' (demain)' : '') ?></span>
+                    </span>
                         <span><?= escapeForHtml($day['already-proposed-commute']) ?></span>
                     <?php }
                     else { ?>
@@ -39,7 +41,7 @@
                                 </svg>
                             </div>
                             <input type="checkbox" value="<?= escapeForHtml($day['day']) . "_" . escapeForHtml($day['date']) ?>" name="dates[]" class="choose-times__day-input">
-                            <?= escapeForHtml($day['day']) ?>
+                            <?= escapeForHtml($day['day']); ?><span style="text-transform:lowercase"><?= escapeForHtml(($day['tomorrow']  === 'yes') ? ' (demain)' : '') ?></span>
                         </label>
                         <label>Départ :
                             <input type="time" class="choose-times__time-input" name="time-<?= escapeForHtml($day['day']) . "_" . escapeForHtml($day['date']) ?>">

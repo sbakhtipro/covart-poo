@@ -129,6 +129,12 @@ abstract class Router {
             return $page;
         }
 
+        if ($controller === 'propose-commute' && $method === 'feedback-ok') {
+            $page = new \App\Controller\ProposeCommute();
+            $page->feedbackOk();
+            return $page;
+        }
+
         if ($controller === 'user' && $method === 'first-login') {
             $page = new \App\Controller\User();
             $page->firstLogin();
