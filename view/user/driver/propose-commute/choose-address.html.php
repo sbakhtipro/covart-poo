@@ -42,8 +42,8 @@
             </fieldset>
             <div class="choose-address__departure"></div>
             <div class="choose-address__arrival"></div>
-            <input type="hidden" id="coordonnees-list" name="coordonnees-list" />
-            <input type="hidden" id="coordonnees-input" name="coordonnees-input" />
+            <!-- <input type="hidden" id="coordonnees-list" name="coordonnees-list" />
+            <input type="hidden" id="coordonnees-input" name="coordonnees-input" /> -->
             <input type="hidden" value="<?= escapeForHtml($token) ?>" name="token-csrf">
             <input type="submit" value="Suivant" id="submit" class="u-action u-action-primary" style="display: none;"/>
         </form>

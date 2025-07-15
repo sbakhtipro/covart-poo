@@ -1,5 +1,7 @@
 <?php
 
+// ajouter variable is_logged
+
 namespace App\Controller;
 
 class User extends Controller {

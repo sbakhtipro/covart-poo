@@ -2,7 +2,13 @@
 
 namespace App\Controller;
 
-class Controller {
+abstract class Controller {
+
+    protected ?\App\Service\Form\FormValidator $formValidator;
+
+    public function __construct() {
+        $this->formValidator = new \App\Service\Form\FormValidator();
+    }
 
     public function redirect($path) {
         header('Location:' . $path);

@@ -1,6 +1,6 @@
 <?php
 
-// IMPORTANT : MESSAGES ERREUR, GESTION ERREURS, FORM VALIDATOR, REFACTO, DRY SAVE STEP 1
+// IMPORTANT : FILTER INPUT, MESSAGES ERREUR, GESTION ERREURS, FORM VALIDATOR, REFACTO, DRY SAVE STEP 1
 
 namespace App\Controller;
 
@@ -172,20 +172,32 @@ class ProposeCommute extends Controller {
         else if (is_array($fieldsPostValid)) {
             $this->chooseAddress($fieldsPostValid);
         }
-        if ($_POST['commute-type'] === '1' || $_POST['commute-type'] === '2') {
-            $_SESSION['form-first-step']['token-csrf'] = $_POST['token-csrf'];
-            $_SESSION['form-first-step']['commute-type']['id'] = $_POST['commute-type'];
-            $_SESSION['form-first-step']['commute-type']['name'] = $_POST['commute-type'] === '1' ? 'aller' : 'retour';
-            $_SESSION['form-first-step']['departure-address'] = $_POST['trajet_lieu_depart'];
-            $_SESSION['form-first-step']['arrival-address'] = $_POST['trajet_lieu_arrivee'];
-            $arrayDepartureCoordinates = explode(', ', $_POST['trajet_lieu_depart_coordonnees']);
-            $arrayArrivalCoordinates = explode(', ', $_POST['trajet_lieu_arrivee_coordonnees']);
-            $_SESSION['form-first-step']['departure-coordinates']['lat'] = $arrayDepartureCoordinates[0];
-            $_SESSION['form-first-step']['departure-coordinates']['lon'] = $arrayDepartureCoordinates[1];
+        $_SESSION['form-first-step']['token-csrf'] = $_POST['token-csrf'];
+        $_SESSION['form-first-step']['commute-type']['id'] = $_POST['commute-type'];
+        if ($_SESSION['form-first-step']['commute-type']['id'] == 1) {
+            $_SESSION['form-first-step']['commute-type']['name'] = 'aller';
+            $_SESSION['form-first-step']['departure-address'] = $_POST['input-address'];
+            $_SESSION['form-first-step']['arrival-address'] = $_POST['list-address'];
+            $arrayDepartureCoordinates = explode(', ', $_POST['coordonnees-input']);
+            $arrayArrivalCoordinates = explode(', ', $_POST['coordonnees-list']);
             $_SESSION['form-first-step']['arrival-coordinates']['lat'] = $arrayArrivalCoordinates[0];
             $_SESSION['form-first-step']['arrival-coordinates']['lon'] = $arrayArrivalCoordinates[1];
+            $_SESSION['form-first-step']['departure-coordinates']['lat'] = $arrayDepartureCoordinates[0];
+            $_SESSION['form-first-step']['departure-coordinates']['lon'] = $arrayDepartureCoordinates[1];
             $this->redirect('index.php?controller=propose-commute&method=choose-vehicle');
-        }        
+        }
+        else if ($_SESSION['form-first-step']['commute-type']['id'] == 2) {
+            $_SESSION['form-first-step']['commute-type']['name'] = 'retour';
+            $_SESSION['form-first-step']['arrival-address'] = $_POST['input-address'];
+            $_SESSION['form-first-step']['departure-address'] = $_POST['list-address'];
+            $arrayDepartureCoordinates = explode(',',$_POST['coordonnees-list']);
+            $arrayArrivalCoordinates = explode(',',$_POST['coordonnees-input']);
+            $_SESSION['form-first-step']['arrival-coordinates']['lat'] = $arrayArrivalCoordinates[0];
+            $_SESSION['form-first-step']['arrival-coordinates']['lon'] = $arrayArrivalCoordinates[1];
+            $_SESSION['form-first-step']['departure-coordinates']['lat'] = $arrayDepartureCoordinates[0];
+            $_SESSION['form-first-step']['departure-coordinates']['lon'] = $arrayDepartureCoordinates[1];
+            $this->redirect('index.php?controller=propose-commute&method=choose-vehicle');
+        }
         else {
             $this->redirect('index.php?controller=propose-commute&method=choose-address');
         }
