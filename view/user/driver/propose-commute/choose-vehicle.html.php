@@ -19,13 +19,13 @@
         <h1 class="choose-vehicle__title">Choix du véhicule</h1>
         <form action="index.php?controller=propose-commute&method=save-step2-data" method="POST" class="choose-vehicle__form">
             <label for="passengers-number">Nombre de passagers :</label>
-            <select name="passengers_number" id="passengers-number">
+            <select name="trajet_nb_places" id="passengers-number">
                 <option value="1">1 </option>
                 <option value="2">2 </option>
                 <option value="3">3 </option>
             </select>
             <label for="vehicle">Véhicule :</label>
-            <select name="vehicle" id="vehicle">
+            <select name="vehicule_id" id="vehicle">
                 <?php foreach ($vehicles as $vehicle) { ?>
                     <option value="<?= $vehicle->getId() ?>"><?= $vehicle->getRegistrationPlate() ?></option>
                 <?php } ?>

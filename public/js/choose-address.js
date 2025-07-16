@@ -21,7 +21,8 @@ async function fetchAddresses() {
 
 function autofill() {
   const input = document.getElementById("address-input")
-  const hiddenInput = document.getElementById("coordonnees-input")
+  const hiddenInputLat = document.getElementById("coordonnees-input-lat")
+  const hiddenInputLon = document.getElementById("coordonnees-input-lon")
   const results = document.getElementById("results")
   input.addEventListener("input", () => {
     let query = input.value.trim()
@@ -43,11 +44,9 @@ function autofill() {
           li.addEventListener("click", () => {
             input.value = li.textContent
             results.innerHTML = ""
-            hiddenInput.value =
-              element["geometry"]["coordinates"][1] +
-              ", " +
-              element["geometry"]["coordinates"][0]
-            if (hiddenInput.value.length > 0) {
+            hiddenInputLat.value = element["geometry"]["coordinates"][1]
+            hiddenInputLon.value = element["geometry"]["coordinates"][0]
+            if (hiddenInputLat.value.length > 0 || hiddenInputLon.value.length > 0) {
               document.getElementById("submit").style.display = "block"
             }
           })
@@ -62,12 +61,15 @@ function autofill() {
 }
 
 function setSelectCoordinates() {
-  let hiddenList = document.getElementById("coordonnees-list")
+  let hiddenListLat = document.getElementById("coordonnees-list-lat")
+  let hiddenListLon = document.getElementById("coordonnees-list-lon")
   let list = document.getElementById("list-address")
   let selected = list.selectedOptions[0]
-  hiddenList.value = selected.dataset.coordonnees
+  hiddenListLat.value = selected.dataset.lat
+  hiddenListLon.value = selected.dataset.lon
   list.addEventListener("change", () => {
-    hiddenList.value = selected.dataset.coordonnees
+    hiddenListLat.value = selected.dataset.lat
+    hiddenListLon.value = selected.dataset.lon
   })
 }
 
@@ -75,8 +77,10 @@ function createInputs(isC, isntC, hasI, hasS, adressList) {
   let adressInput = `<input type="text" id="address-input" class="choose-address__input" name="${isC == 'aller' ? 'trajet_lieu_depart' :'trajet_lieu_arrivee'}" placeholder="Rechercher une adresse" required>
       <ul id="results" class="choose-address__suggestions"></ul>`
   let adressListSelect = `<select class="choose-address__input" name="${isC == 'retour' ? 'trajet_lieu_depart' :'trajet_lieu_arrivee'}" id="list-address">`
-  let hiddenInput = `<input type="hidden" id="coordonnees-input" name="${isC == 'aller' ? 'trajet_lieu_depart_coordonnees' : 'trajet_lieu_arrivee_coordonnees'}" />`
-  let hiddenList = `<input type="hidden" id="coordonnees-list" name="${isC == 'retour' ? 'trajet_lieu_depart_coordonnees' : 'trajet_lieu_arrivee_coordonnees'}" />`
+  let hiddenInputLat = `<input type="hidden" id="coordonnees-input-lat" name="${isC == 'aller' ? 'trajet_lieu_depart_lat' : 'trajet_lieu_arrivee_lat'}" />`
+  let hiddenInputLon = `<input type="hidden" id="coordonnees-input-lon" name="${isC == 'aller' ? 'trajet_lieu_depart_lon' : 'trajet_lieu_arrivee_lon'}" />`
+  let hiddenListLat = `<input type="hidden" id="coordonnees-list-lat" name="${isC == 'retour' ? 'trajet_lieu_depart_lat' : 'trajet_lieu_arrivee_lat'}" />`
+  let hiddenListLon = `<input type="hidden" id="coordonnees-list-lon" name="${isC == 'retour' ? 'trajet_lieu_depart_lon' : 'trajet_lieu_arrivee_lon'}" />`
   let isChecked = document.getElementById(isC)
   let isntChecked = document.getElementById(isntC)
   let hasInput = document.querySelector(".choose-address__" + hasI.en)
@@ -93,7 +97,7 @@ function createInputs(isC, isntC, hasI, hasS, adressList) {
       hasSelect.style.display = "block"
       hasInput.innerHTML =
         `<label class="choose-address__label" for="address-input">${hasI.fr} :</label>` +
-        adressInput + hiddenInput + hiddenList
+        adressInput + hiddenInputLat + hiddenInputLon + hiddenListLat + hiddenListLon
       hasSelect.innerHTML =
         `<label class="choose-address__label">${hasS.fr} :</label>` + adressListSelect +
         adressList
@@ -108,7 +112,7 @@ function displayAddresses() {
   if (data) {
     let adressList = ''
     data.forEach((element) => {
-      adressList += `<option data-coordonnees="${element["agence_lat"]}, ${element["agence_lon"]}" required>${element["agence_numero_voie"]} ${element["agence_voie"]}, ${element["agence_code_postal"]} ${element["agence_ville"]}</option>
+      adressList += `<option data-lat="${element["agence_lat"]}" data-lon="${element["agence_lon"]}" required>${element["agence_numero_voie"]} ${element["agence_voie"]}, ${element["agence_code_postal"]} ${element["agence_ville"]}</option>
             `
     })
     adressList += `</select>`

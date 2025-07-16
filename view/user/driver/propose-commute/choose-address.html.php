@@ -25,7 +25,7 @@
                     <legend class="choose-address__type-legend">Choisir le type de trajet :</legend>
                     <?php foreach($types as $type) { ?>
                         <label class="choose-address__type-label <?= $availableTypes[$type->getName()] === '1' ? '' : 'disabled' ?>">
-                            <input tabindex="0" class="choose-address__type-radio" type="radio" name="commute-type" id="<?= $type->getName() ?>" value="<?= $type->getId() ?>" <?= $availableTypes[$type->getName()] === '1' ? 'required' : 'disabled' ?>><?= $type->getName(); ?>
+                            <input tabindex="0" class="choose-address__type-radio" type="radio" name="type_trajet_id" id="<?= $type->getName() ?>" value="<?= $type->getId() ?>" <?= $availableTypes[$type->getName()] === '1' ? 'required' : 'disabled' ?>><?= $type->getName(); ?>
                             <?php if ($availableTypes[$type->getName()] === '0') { ?>
                                 <div class="choose-address__disabled-type-details">
                                     <button class="choose-address__disabled-type-button" type="button">
