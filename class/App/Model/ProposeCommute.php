@@ -7,7 +7,7 @@ class ProposeCommute extends Model {
     public function getAllUserProposedCommutes($commuteType) {
         $recordset = $this->queryBuilder
             ->table('trajets_proposes')
-            ->select(['trajet_heure_depart'])
+            ->select(['trajet_date_heure_depart'])
             ->from()
             ->where('salarie_id', '=', $_SESSION['id'])
             ->where('trajet_suppression', '=', '0')
@@ -18,7 +18,7 @@ class ProposeCommute extends Model {
             foreach ($recordset as $row) {
                 $proposedCommute = new \App\Entity\ProposedCommute();
                 // $proposedCommute->setCommuteTypeId($row['type_trajet_id']);
-                $proposedCommute->setDepartureTime($row['trajet_heure_depart']);
+                $proposedCommute->setDepartureTime($row['trajet_date_heure_depart']);
                 array_push($proposedCommutes, $proposedCommute);
             }
         }
@@ -35,7 +35,7 @@ class ProposeCommute extends Model {
                 'trajet_lieu_depart' => $data['form-step-1']['departure-address'],
                 'trajet_lieu_depart_lat' => $data['form-step-1']['departure-coordinates']['lat'],
                 'trajet_lieu_depart_lon' => $data['form-step-1']['departure-coordinates']['lon'],
-                'trajet_heure_depart' => $dateTime,
+                'trajet_date_heure_depart' => $dateTime,
                 'trajet_nb_places' => $data['form-step-2']['passengers-number'],
                 'type_trajet_id' => $data['form-step-1']['commute-type']['id'],
                 'salarie_id' => $_SESSION['id'],

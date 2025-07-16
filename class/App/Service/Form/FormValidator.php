@@ -63,8 +63,8 @@ class FormValidator {
     }
 
     public function clearStepInSession($step): void {
-        if (isset($_SESSION[$step])) {
-            unset($_SESSION[$step]);
+        if (isset($_SESSION['form'][$step])) {
+            unset($_SESSION['form'][$step]);
         }
     }
 
@@ -74,8 +74,10 @@ class FormValidator {
                 return false;
             }
             if (!is_array($_POST[$field]) && isset($this->fieldsConditions[$field])) {
-                if (strlen($field) <= $this->fieldsConditions[$field]['min-length'] || strlen($field) > $this->fieldsConditions[$field]['max-length']) {
-                    array_push($errors,[$field => 'Le nombre de caractères est invalide.']);
+                if (isset($this->fieldsConditions[$field]['min-length']) && isset($this->fieldsConditions[$field]['max-length'])) {
+                    if (strlen($field) <= $this->fieldsConditions[$field]['min-length'] || strlen($field) > $this->fieldsConditions[$field]['max-length']) {
+                        array_push($errors,[$field => 'Le nombre de caractères est invalide.']);
+                    }
                 }
             }
         }
@@ -85,7 +87,7 @@ class FormValidator {
         return true;
     }
 
-    private function sanitizeInputs($input) {
+    private function sanitizeInput($input) {
         switch ($this->fieldsConditions[$input]['type']) {
             case 'float':
                 $sanitizedInput = filter_var($input, FILTER_SANITIZE_NUMBER_FLOAT);
@@ -101,10 +103,25 @@ class FormValidator {
         }
     }
 
-    public function saveStepData() {
+    public function saveStepData($formStep,$columns,$tokenCSRF=false) {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            
+            foreach($columns as $column) {
+                $this->sanitizeInput($column);
+                $_SESSION['form'][$formStep][$column] = $_POST[$column];
+            }
+            if ($tokenCSRF) {
+                $_SESSION['form'][$formStep]['token-csrf'] = $_POST['token-csrf'];
+            }
         }
+    }
+
+    public function checkStep($formStep) {
+        foreach ($_SESSION['form'][$formStep] as $column) {
+            if (empty($column)) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

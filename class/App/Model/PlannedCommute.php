@@ -14,7 +14,7 @@ class PlannedCommute extends Model {
                 'sp.salarie_prenom AS passager_prenom',
                 'tp.trajet_lieu_arrivee',
                 'tp.trajet_lieu_depart',
-                'tp.trajet_heure_depart'
+                'tp.trajet_date_heure_depart'
             ])
             ->from()
             ->joinOn('salaries sp', 'sp', 'salarie_id', 'td', 'salarie_id')
