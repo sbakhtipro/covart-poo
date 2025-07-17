@@ -21,7 +21,6 @@ class FormValidator {
     // }
 
     public array $fieldsConditions = [];
-    public array $errors = [];
 
     public function __construct() {
         $this->fieldsConditions = [
@@ -68,57 +67,70 @@ class FormValidator {
         }
     }
 
-    public function checkFieldsPost(array $fields) {
-        foreach ($fields as $field) {
-            if (empty($_POST[$field])) {
-                return false;
-            }
-            if (!is_array($_POST[$field]) && isset($this->fieldsConditions[$field])) {
-                if (isset($this->fieldsConditions[$field]['min-length']) && isset($this->fieldsConditions[$field]['max-length'])) {
-                    if (strlen($field) <= $this->fieldsConditions[$field]['min-length'] || strlen($field) > $this->fieldsConditions[$field]['max-length']) {
-                        array_push($errors,[$field => 'Le nombre de caractères est invalide.']);
+    public function checkFieldsPost(array $fields): array|bool {
+        // var_dump($fields);
+        // var_dump($_POST['trajet_date_heure_depart']);
+        // exit;
+        $errors = [];
+        if (isset($_POST)) {
+            foreach ($fields as $field) {
+                if (empty($_POST[$field])) {
+                    $errors[$field] = 'Le champ ne peut pas être vide.';
+                    continue;
+                }
+                if (!is_array($_POST[$field]) && isset($this->fieldsConditions[$field])) {
+                    if (isset($this->fieldsConditions[$field]['min-length']) && isset($this->fieldsConditions[$field]['max-length'])) {
+                        if (strlen($_POST[$field]) <= $this->fieldsConditions[$field]['min-length'] || strlen($_POST[$field]) > $this->fieldsConditions[$field]['max-length']) {
+                            $errors[$field] = 'Le nombre de caractères est invalide.';
+                        }
                     }
                 }
             }
-        }
-        if (!empty($errors)) {
-            return $errors;
+            if (!empty($errors)) {
+                return $errors;
+            }
         }
         return true;
     }
 
-    private function sanitizeInput($input) {
-        switch ($this->fieldsConditions[$input]['type']) {
+    private function sanitizeInput($key,$value): mixed {
+        switch ($this->fieldsConditions[$key]['type']) {
             case 'float':
-                $sanitizedInput = filter_var($input, FILTER_SANITIZE_NUMBER_FLOAT);
+                $sanitizedInput = filter_var($value, FILTER_SANITIZE_NUMBER_FLOAT);
                 return filter_var($sanitizedInput, FILTER_VALIDATE_FLOAT);
             case 'int':
-                $sanitizedInput = filter_var($input, FILTER_SANITIZE_NUMBER_INT);
+                $sanitizedInput = filter_var($value, FILTER_SANITIZE_NUMBER_INT);
                 return filter_var($sanitizedInput, FILTER_VALIDATE_INT);
             case 'mail':
-                $sanitizedInput = filter_var($input, FILTER_SANITIZE_EMAIL);
+                $sanitizedInput = filter_var($value, FILTER_SANITIZE_EMAIL);
                 return filter_var($sanitizedInput, FILTER_VALIDATE_EMAIL);
             default:
-                return filter_var($input, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                return filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         }
     }
 
-    public function saveStepData($formStep,$columns,$tokenCSRF=false) {
+    public function saveStepData($formStep,$columns,$tokenCSRF=false): bool {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            foreach($columns as $column) {
-                $this->sanitizeInput($column);
-                $_SESSION['form'][$formStep][$column] = $_POST[$column];
-            }
-            if ($tokenCSRF) {
-                $_SESSION['form'][$formStep]['token-csrf'] = $_POST['token-csrf'];
+            if (isset($_POST)) {
+                foreach($columns as $column) {
+                    $sanitizedInput = $this->sanitizeInput($column, $_POST[$column]);
+                    $_SESSION['form'][$formStep][$column] = $sanitizedInput;
+                }
+                if ($tokenCSRF) {
+                    $_SESSION['form'][$formStep]['token-csrf'] = $_POST['token-csrf'];
+                }
+                return true;
             }
         }
+        return false;
     }
 
-    public function checkStep($formStep) {
-        foreach ($_SESSION['form'][$formStep] as $column) {
-            if (empty($column)) {
-                return false;
+    public function checkStep($formStep): bool {
+        if (isset($_SESSION['form'][$formStep])) {
+            foreach ($_SESSION['form'][$formStep] as $column) {
+                if (empty($column)) {
+                    return false;
+                }
             }
         }
         return true;
