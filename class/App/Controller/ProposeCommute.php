@@ -1,6 +1,6 @@
 <?php
 
-// IMPORTANT : MESSAGES ERREUR, GESTION ERREURS, FORM VALIDATOR, REFACTO
+// IMPORTANT : MESSAGES ERREUR, GESTION ERREURS
 // NB PASSAGERS A LIMITER AVANT ENTREE DANS BDD
 
 namespace App\Controller;
@@ -17,26 +17,50 @@ class ProposeCommute extends Controller {
     public array $formFields = [];
 
     public function __construct() {
-        // CONSTRUCTEUR REDEFINI = APPEL AU CONSTRUCTEUR PARENT !!!!!!
+        // CONSTRUCTEUR REDEFINI = APPEL AU CONSTRUCTEUR PARENT !
         parent::__construct();
         $this->tableDaysAller = $_SESSION['form']['table-days-aller'] ?? [];
         $this->tableDaysRetour = $_SESSION['form']['table-days-retour'] ?? [];
         $this->formFields = [
             $this->chooseAddress => [
-                'type_trajet_id',
-                'trajet_lieu_depart',
-                'trajet_lieu_arrivee',
-                'trajet_lieu_depart_lat',
-                'trajet_lieu_depart_lon',
-                'trajet_lieu_arrivee_lat',
-                'trajet_lieu_arrivee_lon'
+                'type_trajet_id' => [
+                    'type' => 'int'
+                ],
+                'trajet_lieu_depart' => [
+                    'min' => 3,
+                    'max' => 50,
+                    'type' => 'string'
+                ],
+                'trajet_lieu_arrivee' => [
+                    'min' => 3,
+                    'max' => 50,
+                    'type' => 'string'
+                ],
+                'trajet_lieu_depart_lat' => [
+                    'type' => 'float'
+                ],
+                'trajet_lieu_depart_lon' => [
+                    'type' => 'float'
+                ],
+                'trajet_lieu_arrivee_lat' => [
+                    'type' => 'float'
+                ],
+                'trajet_lieu_arrivee_lon' => [
+                    'type' => 'float'
+                ],
             ],
             $this->chooseVehicle => [
-                'trajet_nb_places',
-                'vehicule_id'
+                'trajet_nb_places' => [
+                    'type' => 'int'
+                ],
+                'vehicule_id' => [
+                    'type' => 'int'
+                ]
             ],
             $this->chooseTimes => [
-                'trajet_date_heure_depart'
+                'trajet_date_heure_depart' => [
+                    'type' => 'string'
+                ],
             ]
         ];
     }
@@ -74,8 +98,6 @@ class ProposeCommute extends Controller {
     }
 
     public function chooseAddress($e=[]): void {
-        // var_dump($_SESSION['form']);
-        // exit;
         $this->startProposeCommute();
         $this->formValidator->clearStepInSession($this->chooseAddress);
         $getTypes = new \App\Model\CommuteTypes();
@@ -113,8 +135,6 @@ class ProposeCommute extends Controller {
         }
         if ($_POST['type_trajet_id'] === '1' || $_POST['type_trajet_id'] === '2') {
             $this->formValidator->saveStepData($this->chooseAddress,$this->formFields[$this->chooseAddress],true);
-            // var_dump($_SESSION['form']);
-            // exit;
             $this->redirect('index.php?controller=propose-commute&method=choose-vehicle');
         }        
         else {
@@ -140,8 +160,6 @@ class ProposeCommute extends Controller {
             $this->chooseVehicle($fieldsPostValid);
         }
         $this->formValidator->saveStepData($this->chooseVehicle,$this->formFields[$this->chooseVehicle],true);
-        // var_dump($_SESSION['form']);
-        // exit;
         $this->redirect('index.php?controller=propose-commute&method=choose-times');
     }
 
@@ -174,9 +192,10 @@ class ProposeCommute extends Controller {
     }
 
     public function chooseTimes(): void {
-        // unset($_POST['dates']);
         $this->formValidator->clearStepInSession($this->chooseTimes);
-        // var_dump($_SESSION['form']);
+        var_dump($_SESSION['form'][$this->chooseAddress]);
+        var_dump($this->tableDaysAller);
+        var_dump($this->tableDaysRetour);
         $chooseAddressOK = $this->formValidator->checkStep($this->chooseAddress);
         $chooseVehicleOK = $this->formValidator->checkStep($this->chooseVehicle);
         if (!$chooseAddressOK) {
@@ -185,10 +204,10 @@ class ProposeCommute extends Controller {
         if (!$chooseVehicleOK) {
             $this->redirect('index.php?controller=propose-commute&method=choose-vehicle');
         }
-        if ($_SESSION['form'][$this->chooseAddress]['type_trajet_id'] === '1') {
+        if ($_SESSION['form'][$this->chooseAddress]['type_trajet_id'] == '1') {
             $tableDays = $this->tableDaysAller;
         }
-        else if ($_SESSION['form'][$this->chooseAddress]['type_trajet_id'] === '2') {
+        else if ($_SESSION['form'][$this->chooseAddress]['type_trajet_id'] == '2') {
             $tableDays = $this->tableDaysRetour;
         }
         $token = $_SESSION['token_csrf'];
@@ -217,8 +236,6 @@ class ProposeCommute extends Controller {
     }
 
     public function summary(): void {
-        // var_dump($_SESSION['form']);
-        // exit;
         $chooseAddressOK = $this->formValidator->checkStep($this->chooseAddress);
         $chooseVehicleOK = $this->formValidator->checkStep($this->chooseVehicle);
         $chooseTimesOK = $this->formValidator->checkStep($this->chooseTimes);
@@ -229,11 +246,8 @@ class ProposeCommute extends Controller {
             $this->redirect('index.php?controller=propose-commute&method=choose-vehicle');
         }
         if (!$chooseTimesOK) {
-            // echo 'AAAAAAAAAAA';
-            exit;
             $this->redirect('index.php?controller=propose-commute&method=choose-times');
         }
-        // var_dump($_SESSION['form']);
         $data = $_SESSION['form'][$this->chooseAddress] + $_SESSION['form'][$this->chooseVehicle];
         if (isset($_SESSION['form'][$this->chooseTimes])) {
             foreach ($_SESSION['form'][$this->chooseTimes]['trajet_date_heure_depart'] as $date=>$time) {
@@ -247,8 +261,6 @@ class ProposeCommute extends Controller {
                 ];
             }
         }
-        // var_dump($data);
-        // exit;
         $this->render('user/driver/propose-commute/summary', compact('data'));
     }
 
@@ -257,35 +269,39 @@ class ProposeCommute extends Controller {
         $chooseVehicleOK = $this->formValidator->checkStep($this->chooseVehicle);
         $chooseTimesOK = $this->formValidator->checkStep($this->chooseTimes);
         if (!$chooseAddressOK) {
+            $test = 'test';
+            var_dump($test);
+            exit;
             $this->redirect('index.php?controller=propose-commute&method=choose-address');
         }
         if (!$chooseVehicleOK) {
             $this->redirect('index.php?controller=propose-commute&method=choose-vehicle');
         }
         if (!$chooseTimesOK) {
-            exit;
-            // $this->redirect('index.php?controller=propose-commute&method=choose-times');
+            $this->redirect('index.php?controller=propose-commute&method=choose-times');
         }
-        // var_dump($_SESSION['form']);
-        // exit;
         $this->checkTokenCSRF();
         $this->checkUserRole();
-        // if ($_SESSION['form'][$this->chooseAddress]['type_trajet_id']['id'] == 1 || $_SESSION['form'][$this->chooseAddress]['type_trajet_id']['id'] == 2) {
-        //     $type = $_SESSION['form']['form-first-step']['commute-type']['id'];
-        // }
-        // else {
-        //     // echo 'test';
-        //     // exit;
-        //     $this->redirect('index.php?controller=propose-commute&method=choose-address');
-        // }
+        if ($_SESSION['form'][$this->chooseAddress]['type_trajet_id'] == 1 || $_SESSION['form'][$this->chooseAddress]['type_trajet_id'] == 2) {
+            $type = $_SESSION['form'][$this->chooseAddress]['type_trajet_id'];
+        }
+        else {
+            $test = 'test';
+            var_dump($test);
+            exit;
+            $this->redirect('index.php?controller=propose-commute&method=choose-address');
+        }
         $getModelProposedCommutes = new \App\Model\ProposeCommute();
         $proposedCommutes = $getModelProposedCommutes->getAllUserProposedCommutes($type);
         foreach ($proposedCommutes as $proposedCommute) {
             $dateFromObject = $proposedCommute->getDepartureTime();
             $date = $dateFromObject->format('Y-m-d');
-            foreach ($_SESSION['form']['form-third-step']['commute-dates'] as $key => $value) {
+            foreach ($_SESSION['form'][$this->chooseTimes]['trajet_date_heure_depart'] as $key => $value) {
                 $keyArray = explode('_',$key);
                 if ($date == $keyArray[1]) {
+                    $test = 'test';
+                    var_dump($test);
+                    exit;
                     $this->redirect('index.php?controller=propose-commute&method=choose-address');
                 }
             }
@@ -295,6 +311,7 @@ class ProposeCommute extends Controller {
 
     private function checkTokenCSRF(): void {
         if ($_SESSION['form'][$this->chooseAddress]['token-csrf'] != $_SESSION['token_csrf'] || $_SESSION['form'][$this->chooseVehicle]['token-csrf'] != $_SESSION['token_csrf'] || $_SESSION['form'][$this->chooseTimes]['token-csrf'] != $_SESSION['token_csrf']) {
+            // rediriger vers page d'erreur
             $this->redirect('index.php?controller=driver-home&method=display-home');
         }
     }
@@ -305,18 +322,14 @@ class ProposeCommute extends Controller {
     }
 
     public function sendCommutesData(): void {
-        if (empty($this->data['propose-commute-step-3']['commute-dates'])) {
-            $this->redirect('index.php?controller=propose-commute&method=choose-times');
-        }
-        foreach ($this->data['propose-commute-step-3']['commute-dates'] as $date => $value) {
-            // var_dump($date . ' ' . $value['time']);
-            // exit;
+        foreach ($_SESSION['form'][$this->chooseTimes]['trajet_date_heure_depart'] as $key => $value) {
+            $date = explode('_',$key);
             $postCommutes = new \App\Model\ProposeCommute();
-            $postCommutes->insertCommutesData($this->data,$date . ' ' . $value['time']);
+            $postCommutes->insertCommutesData($_SESSION['form'], $date[1] . ' ' . $value);
         }
-        $this->formValidator->clearStepInSession('form-first-step');
-        $this->formValidator->clearStepInSession('form-second-step');
-        $this->formValidator->clearStepInSession('form-third-step');
+        $this->formValidator->clearStepInSession($this->chooseAddress);
+        $this->formValidator->clearStepInSession($this->chooseVehicle);
+        $this->formValidator->clearStepInSession($this->chooseTimes);
         $this->redirect('index.php?controller=propose-commute&method=feedback-ok');
     }
 

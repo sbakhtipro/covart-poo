@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Service;
+// namespace App\Service;
 
-class ExportAddressesJSON {
+// class ExportAddressesJSON {
 
-    public function ExportAddresses($recordset) {
-        header('Content-Type: application/json');
-        echo json_encode($recordset);
-    }
+//     public function ExportAddresses($recordset) {
+//         header('Content-Type: application/json');
+//         echo json_encode($recordset);
+//     }
 
-}
+// }

@@ -29,19 +29,18 @@ class ProposeCommute extends Model {
         $request = $this->queryBuilder
             ->table('trajets_proposes')
             ->insertInto([
-                'trajet_lieu_arrivee' => $data['form-step-1']['arrival-address'],
-                'trajet_lieu_arrivee_lat' => $data['form-step-1']['arrival-coordinates']['lat'],
-                'trajet_lieu_arrivee_lon' => $data['form-step-1']['arrival-coordinates']['lon'],
-                'trajet_lieu_depart' => $data['form-step-1']['departure-address'],
-                'trajet_lieu_depart_lat' => $data['form-step-1']['departure-coordinates']['lat'],
-                'trajet_lieu_depart_lon' => $data['form-step-1']['departure-coordinates']['lon'],
+                'trajet_lieu_arrivee' => $data['propose-commute-step-1']['trajet_lieu_arrivee'],
+                'trajet_lieu_arrivee_lat' => $data['propose-commute-step-1']['trajet_lieu_arrivee_lat'],
+                'trajet_lieu_arrivee_lon' => $data['propose-commute-step-1']['trajet_lieu_arrivee_lon'],
+                'trajet_lieu_depart' => $data['propose-commute-step-1']['trajet_lieu_depart'],
+                'trajet_lieu_depart_lat' => $data['propose-commute-step-1']['trajet_lieu_depart_lat'],
+                'trajet_lieu_depart_lon' => $data['propose-commute-step-1']['trajet_lieu_depart_lon'],
                 'trajet_date_heure_depart' => $dateTime,
-                'trajet_nb_places' => $data['form-step-2']['passengers-number'],
-                'type_trajet_id' => $data['form-step-1']['commute-type']['id'],
+                'trajet_nb_places' => $data['propose-commute-step-2']['trajet_nb_places'],
+                'type_trajet_id' => $data['propose-commute-step-1']['type_trajet_id'],
                 'salarie_id' => $_SESSION['id'],
-                'vehicule_id' => $data['form-step-2']['vehicle']
+                'vehicule_id' => $data['propose-commute-step-2']['vehicule_id']
                 ])
-            // ->where('salarie_id', '=', $_SESSION['id'])
             ->query();
     }
 
