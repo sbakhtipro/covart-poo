@@ -5,7 +5,12 @@ namespace App\Entity;
 class Users {
 
     private $id;
-    private ?string $password;
+    private ?string $address;
+    private ?float $addressLat;
+    private ?float $addressLon;
+    private ?string $phoneNumber;
+    private string $mail;
+    private string $password;
     private ?bool $licenseVerified;
     private ?bool $status;
     private ?string $description;
@@ -19,6 +24,50 @@ class Users {
             return $this->id;
         }
         return escapeForHtml($this->id);
+    }
+
+    public function setAddress(?string $address): void {
+        $this->address = $address;
+    }
+    public function getAddress(bool $raw = false): ?string {
+        if ($raw) {
+            return $this->address;
+        }
+        return escapeForHtml($this->address);
+    }
+
+    public function setAddressLat(?float $addressLat): void {
+        $this->addressLat = $addressLat;
+    }
+    public function getAddressLat(): ?float {
+        return $this->addressLat;
+    }
+
+    public function setAddressLon(?float $addressLon): void {
+        $this->addressLon = $addressLon;
+    }
+    public function getAddressLon(): ?float {
+        return $this->addressLon;
+    }
+
+    public function setPhoneNumber(?string $phoneNumber): void {
+        $this->phoneNumber = $phoneNumber;
+    }
+    public function getPhoneNumber(bool $raw = false): ?string {
+        if ($raw) {
+            return $this->phoneNumber;
+        }
+        return escapeForHtml($this->phoneNumber);
+    }
+
+    public function setMail(string $mail): void {
+        $this->mail = $mail;
+    }
+    public function getMail(bool $raw = false): string {
+        if ($raw) {
+            return $this->mail;
+        }
+        return escapeForHtml($this->mail);
     }
 
     public function setPassword(string $password): void {
@@ -45,10 +94,10 @@ class Users {
         return $this->status;
     }
 
-    public function setDescription(string $description): void {
+    public function setDescription(?string $description): void {
         $this->description = $description;
     }
-    public function getDescription(bool $raw = false): string {
+    public function getDescription(bool $raw = false): ?string {
         if ($raw) {
             return $this->description;
         }

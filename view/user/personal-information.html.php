@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profil - NOM PRENOM</title>
-    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/address-autofill.js" defer></script>
 </head>
-<body class="u-passenger-theme">
+<body class="u-<?= escapeForHtml($_SESSION['role']) ?>-theme">
 
     <main class="personal-information u-container-sm" id="main">
         <h1 class="personal-information">Mes informations</h1>
-        <form action="" class="personal-information__form">
+        <form action="index.php?controller=personal-information&method=get-personal-information" class="personal-information__form">
             <div class="personal-information__pp">
                 <div class="personal-information__pp-img-wrapper u-img-wrapper">
                     <img src="../img/user-image.png" alt="">
@@ -24,36 +25,33 @@
             </div>
             <label class="personal-information__label">
                 Nom
-                <input class="personal-information__input" type="text" name="salarie_nom" value="BAKHTI" disabled>
+                <input class="personal-information__input" type="text" name="salarie_nom" value="<?= $informations['employee']->getName() ?>" disabled>
             </label>
             <label class="personal-information__label">
                 Prénom
-                <input class="personal-information__input" type="text" name="salarie_prenom"  value="Sarah" disabled>
+                <input class="personal-information__input" type="text" name="salarie_prenom" value="<?= $informations['employee']->getFirstName() ?>" disabled>
             </label>
             <label class="personal-information__label">
                 Date de naissance
-                <input class="personal-information__input" type="date" name="salarie_date_naissance">
-            </label>
-            <label class="personal-information__label">
-                Numéro de téléphone
-                <input class="personal-information__input" type="text" name="salarie_numero_telephone"  value="06 36 40 43 73" disabled>
-            </label>
-            <label class="personal-information__label">
-                Email
-                <input class="personal-information__input" type="email" name="salarie_email" value="sarah.bxkhti@gmail.com" disabled>
+                <input class="personal-information__input" type="date" name="salarie_date_naissance" value="<?= $informations['employee']->getBirthDate() ?>" disabled>
             </label>
             <label class="personal-information__label">
                 Adresse
-                <input class="personal-information__input" type="text" name="salarie_adresse" value="7 rue de la Ronde" disabled> <!-- composée des colonnes numéro de voie et voie -->
+                <input class="personal-information__input" type="text" id="address-input" name="salarie_adresse" placeholder="Rechercher une adresse" required>
+                <ul id="results" class="personal-information__address-suggestions"></ul>
             </label>
             <label class="personal-information__label">
-                Ville
-                <input class="personal-information__input" type="text" name="salarie_ville" value="METZ" disabled>
+                Numéro de téléphone
+                <input class="personal-information__input" type="text" name="salarie_numero_telephone" value="<?= $informations['user']->getPhoneNumber() ?>">
             </label>
             <label class="personal-information__label">
-                Code postal
-                <input class="personal-information__input" type="text" name="salarie_code_postal" value="57050" disabled>
+                Email
+                <input class="personal-information__input" type="email" name="salarie_email" value="<?= $informations['user']->getMail() ?>">
             </label>
+            <input type="hidden" id="coordonnees-lat" name="coordonnees-lat" />
+            <input type="hidden" id="coordonnees-lon" name="coordonnees-lon" />
+            <input type="hidden" value="<?= escapeForHtml($token) ?>" name="token-csrf">
+            <input type="submit" value="Modifier mes informations" class="u-action u-action-primary">
         </form>
     </main>
 </body>

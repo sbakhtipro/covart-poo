@@ -15,7 +15,7 @@
             </button>
             <ul class="nav__links-list">
                 <li class="nav__item"><a href="/index.php?controller=<?= escapeForHtml($_SESSION['role']) ?>-home&method=display-home" class="nav__link">Accueil</a></li>
-                <li class="nav__item"><a href="/index.php?page=user-account" class="nav__link">Mon compte</a></li>
+                <li class="nav__item"><a href="/index.php?controller=user&method=my-account" class="nav__link">Mon compte</a></li>
                 <li class="nav__item"><a href="/index.php?controller=user&method=logout" class="nav__link">Déconnexion</a></li>
             </ul>
         </div>

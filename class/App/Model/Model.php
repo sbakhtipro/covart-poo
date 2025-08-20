@@ -4,10 +4,10 @@ namespace App\Model;
 
 abstract class Model {
 
-    protected \App\Database\QueryBuilder $queryBuilder;
+    protected \Core\Database\QueryBuilder $queryBuilder;
 
     public function __construct() {
-        $this->queryBuilder = new \App\Database\QueryBuilder();
+        $this->queryBuilder = new \Core\Database\QueryBuilder();
     }
     // protected static string $table;
 

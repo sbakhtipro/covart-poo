@@ -19,10 +19,10 @@ class Vehicles {
         return escapeForHtml($this->id);
     }
 
-    public function setRegistrationPlate(string $registrationPlate): void {
+    public function setRegistrationPlate(?string $registrationPlate): void {
         $this->registrationPlate = $registrationPlate;
     }
-    public function getRegistrationPlate(bool $raw = false) {
+    public function getRegistrationPlate(bool $raw = false): ?string {
         if ($raw) {
             return $this->registrationPlate;
         }

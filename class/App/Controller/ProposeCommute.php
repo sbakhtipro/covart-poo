@@ -1,7 +1,10 @@
 <?php
 
 // IMPORTANT : MESSAGES ERREUR, GESTION ERREURS
-// NB PASSAGERS A LIMITER AVANT ENTREE DANS BDD
+// NB PASSAGERS A LIMITER AVANT ENTREE DANS BDD -> A TESTER! (front: laisser possibilité de prendre 4 passagers dans select option)
+// VERIFIER SI FEEDBACK PAS OK -> voir avec execute qui retourne true false
+// REVOIR LES VERIFICATIONS AVANT ENTREE DANS BDD
+// docstrings!
 
 namespace App\Controller;
 
@@ -93,7 +96,7 @@ class ProposeCommute extends Controller {
     public function fetchAddresses(): void {
         $getAddresses = new \App\Model\Agencies();
         $addresses = $getAddresses->getAllAddresses();
-        $exportAddresses = new \App\Service\ExportJSON();
+        $exportAddresses = new \Core\Service\ExportJSON();
         $exportAddresses->exportData($addresses);
     }
 

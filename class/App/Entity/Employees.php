@@ -5,19 +5,19 @@ namespace App\Entity;
 class Employees {
 
     private $id;
-    private ?string $name;
-    private ?string $prenom;
-    private ?string $birthDate;
-    private ?string $streetNumber;
-    private ?string $street;
-    private ?string $postalCode;
-    private ?string $city;
+    private string $name;
+    private string $firstName;
+    private string $birthDate;
+    private string $streetNumber;
+    private string $street;
+    private string $postalCode;
+    private string $city;
     private ?string $phoneNumber;
-    private ?string $mail;
-    private ?string $registrationNumber;
-    private ?\DateTime $hireDate;
-    private ?string $status;
-    private ?bool $isManager;
+    private string $mail;
+    private string $registrationNumber;
+    private \DateTime $hireDate;
+    private string $status;
+    private bool $isManager;
     private $positionId;
     
     public function setId($id): void {
@@ -40,14 +40,14 @@ class Employees {
         return escapeForHtml($this->name);
     }
 
-    public function setPrenom(string $prenom): void {
-        $this->prenom = $prenom;
+    public function setFirstName(string $firstName): void {
+        $this->firstName = $firstName;
     }
-    public function getPrenom(bool $raw = false): string {
+    public function getFirstName(bool $raw = false): string {
         if ($raw) {
-            return $this->prenom;
+            return $this->firstName;
         }
-        return escapeForHtml($this->prenom);
+        return escapeForHtml($this->firstName);
     }
     
     public function setBirthDate(string $birthDate): void {
@@ -100,10 +100,10 @@ class Employees {
         return escapeForHtml($this->city);
     }
 
-    public function setPhoneNumber(string $phoneNumber): void {
+    public function setPhoneNumber(?string $phoneNumber): void {
         $this->phoneNumber = $phoneNumber;
     }
-    public function getPhoneNumber(bool $raw = false): string {
+    public function getPhoneNumber(bool $raw = false): ?string {
         if ($raw) {
             return $this->phoneNumber;
         }

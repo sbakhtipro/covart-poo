@@ -141,6 +141,24 @@ abstract class Router {
             return $page;
         }
 
+        if ($controller === 'user' && $method === 'my-account') {
+            $page = new \App\Controller\User();
+            $page->myAccount();
+            return $page;
+        }
+
+        if ($controller === 'personal-information' && $method === 'get-personal-information') {
+            $page = new \App\Controller\PersonalInformation();
+            $page->getPersonalInformation();
+            return $page;
+        }
+
+        if ($controller === 'personal-information' && $method === 'update-personal-information') {
+            $page = new \App\Controller\PersonalInformation();
+            $page->updatePersonalInformation();
+            return $page;
+        }
+
         // if ($controller == "product" && $method == "listing")
         // return (new \App\Controller\Product())->listing();
 

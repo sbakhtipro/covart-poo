@@ -46,9 +46,14 @@ class User extends Controller {
         $_SESSION['role'] = '';
         $_SESSION['id'] = '';
         $_SESSION['permis_verifie'] = '';
+        $_SESSION['token-csrf'] = '';
         session_unset();
         session_destroy();
         $this->redirect('/index.php?controller=user&method=login');
+    }
+
+    public function myAccount() {
+        $this->render('user/user-account');
     }
 
 }

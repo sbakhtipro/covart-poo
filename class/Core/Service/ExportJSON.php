@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service;
+namespace Core\Service;
 
 class ExportJSON {
     // si problème vérifier si pas de var dump dans les classes impliquées et leurs parents!!

@@ -64,20 +64,18 @@ class FormValidator {
 
     public function saveStepData($formStep,$columns,$tokenCSRF=false): bool {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if (isset($_POST)) {
-                foreach($columns as $column => $conditions) {
-                    $sanitizedInput = $this->sanitizeInput($column, $_POST[$column]);
-                    if ($sanitizedInput === false || $sanitizedInput === null) {
-                        return false;
-                    } 
-                    $_SESSION['form'][$formStep][$column] = $_POST[$column];
-                }
-                if ($tokenCSRF) {
-                    $sanitizedToken = trim(strip_tags($_POST['token-csrf']));
-                    $_SESSION['form'][$formStep]['token-csrf'] = $sanitizedToken;
-                }
-                return true;
+            foreach($columns as $column => $conditions) {
+                $sanitizedInput = $this->sanitizeInput($column, $_POST[$column]);
+                if ($sanitizedInput === false || $sanitizedInput === null) {
+                    return false;
+                } 
+                $_SESSION['form'][$formStep][$column] = $_POST[$column];
             }
+            if ($tokenCSRF) {
+                $sanitizedToken = trim(strip_tags($_POST['token-csrf']));
+                $_SESSION['form'][$formStep]['token-csrf'] = $sanitizedToken;
+            }
+            return true;
         }
         return false;
     }

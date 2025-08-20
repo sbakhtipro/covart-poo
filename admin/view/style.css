@@ -1,0 +1,138 @@
+@font-face {
+    font-family: 'Poppins';
+    src: url(Poppins/Poppins-Regular.ttf);
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+body {
+    background-color: #0384BE;
+    font-family: 'Poppins', sans-serif;
+}
+
+.root {
+    margin: 200px auto;
+    padding: 1rem;
+    max-width: 500px;
+    position: relative;
+}
+
+.home {
+    background-color: rgba(255, 255, 255, 0.362);
+    margin: 1.5rem;
+    padding: 2rem;
+    border-radius: 30px;
+}
+
+.excuse {
+    margin: auto;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 1.3rem;
+}
+
+.excuse-button, .add-excuse-button, .form input[type="submit"] {
+    display: block;
+    font-size: 1.1rem;
+    margin: auto;
+    cursor: pointer;
+    user-select: none;
+    padding: 10px 30px;
+    font-family: 'Poppins', sans-serif;
+    border: none;
+    border-radius: 50px;
+}
+
+.excuse-button {
+    background-color: #1d207e;
+    color: white;
+}
+
+.add-excuse-button {
+    background-color: #00000000;
+    margin-top: 10px;
+    padding: 20px 30px;
+    color: #1d207e;
+    font-weight: bold;
+}
+
+.modale {
+    display: none;
+    position: absolute;
+    background-color: white;
+    inset: 0;
+    border-radius: 10px;
+    padding: 1.5rem;
+}
+
+.modale-visible {
+    display: flex;
+    align-items: center;
+}
+
+.form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.form label {
+    margin-bottom: 0.5rem;
+}
+
+.form input {
+    padding: 10px;
+}
+
+.form textarea {
+    height: 100px;
+    resize: none;
+}
+
+.form input, .form textarea {
+    margin-bottom: 1.5rem;
+}
+
+.form input[type="submit"] {
+    background-color: rgb(190, 190, 190);
+}
+
+.form .close-button {
+    position: absolute;
+    top: 8px;
+    right: 15px;
+    border: none;
+    background-color: #00000000;
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+
+.success-feedback {
+    position: absolute;
+    width: 100%;
+    background-color: rgb(12, 115, 12);
+    color: white;
+    text-align: center;
+    top: 0;
+    padding: 30px 20px; 
+}
+
+.gif {
+    width: 100%;
+}
+
+@media (max-width:600px) {
+    .root {
+        margin: 30px auto;
+    }
+}

@@ -20,7 +20,7 @@ class User extends Model {
         return $this->userCredentials;
     }
 
-     public function updateLastRole($roleId) {
+    public function updateLastRole($roleId) {
         $lastRole = $this->queryBuilder
             ->table('utilisateurs')
             ->update(['role_id' => $roleId])

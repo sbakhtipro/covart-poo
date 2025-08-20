@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Database;
+namespace Core\Database;
 
 class QueryBuilder {
 
@@ -15,7 +15,7 @@ class QueryBuilder {
     public ?array $bindings = [];
     public ?string $sql = '';
 
-     /**
+    /**
      * Réinitialiser les propriétés après une requête
      * @return void
      */
@@ -161,14 +161,20 @@ class QueryBuilder {
 
     /**
      * Rassemble les morceaux de requête et l'exécute
-     * @return void
+     * @param bool $recordset    Définir si le résultat doit être un recordset ou un row
+     * @return array
      */
-    public function query(): array {
+    public function query(bool $recordset = true): array {
         $this->sql = $this->select . $this->insertInto . $this->delete . $this->update . $this->from . $this->joinOn . $this->where;
-        $stmt = Database::getDb()->prepare($this->sql);
+        $stmt = \App\Database\Database::getDb()->prepare($this->sql);
         // var_dump($this->sql);
         $stmt->execute($this->bindings);
-        $data = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        if ($recordset) {
+            $data = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        }
+        else {
+            $data = $stmt->fetch();
+        }
         $this->reset();
         return $data;
     }

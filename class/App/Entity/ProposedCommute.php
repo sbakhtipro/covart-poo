@@ -5,13 +5,13 @@ namespace App\Entity;
 class ProposedCommute {
 
     private $id;
-    private ?string $arrivalPlace;
-    private ?float $arrivalPlaceLat;
-    private ?float $arrivalPlaceLon;
-    private ?string $departurePlace;
-    private ?float $departurePlaceLat;
-    private ?float $departurePlaceLon;
-    private ?\DateTime $departureTime;
+    private string $arrivalPlace;
+    private float $arrivalPlaceLat;
+    private float $arrivalPlaceLon;
+    private string $departurePlace;
+    private float $departurePlaceLat;
+    private float $departurePlaceLon;
+    private \DateTime $departureTime;
     private ?bool $suppression = false;
     private ?\DateTime $suppressionTime = null;
     private $commuteTypeId;
@@ -94,7 +94,7 @@ class ProposedCommute {
     public function setSuppressionTime(?string $suppressionTime = null): void {
         $this->suppressionTime = new \DateTime($suppressionTime);
     }
-    public function getSuppressionTime(): ?\DateTime {
+    public function getSuppressionTime(): \DateTime {
         return $this->suppressionTime;
     }
 
